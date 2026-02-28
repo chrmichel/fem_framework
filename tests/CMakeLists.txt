@@ -1,0 +1,15 @@
+add_executable(test_mesh test_mesh.cpp)
+target_link_libraries(test_mesh PRIVATE fem)
+add_test(NAME MeshTest COMMAND test_mesh)
+
+add_executable(test_poisson_linear_dirichlet test_poisson_linear_dirichlet.cpp)
+target_link_libraries(test_poisson_linear_dirichlet PRIVATE fem)
+add_test(NAME PoissonLinearDirichletTest COMMAND test_poisson_linear_dirichlet)
+
+add_executable(test_poisson_convergence test_poisson_convergence.cpp)
+target_link_libraries(test_poisson_convergence PRIVATE fem)
+add_test(NAME PoissonConvergenceTest COMMAND test_poisson_convergence)
+
+add_executable(test_poisson_l2_error test_poisson_l2_error.cpp)
+target_link_libraries(test_poisson_l2_error PRIVATE fem)
+add_test(NAME PoissonL2ErrorTest COMMAND test_poisson_l2_error)
