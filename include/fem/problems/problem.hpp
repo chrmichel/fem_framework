@@ -2,6 +2,10 @@
 
 #include <memory>
 #include <vector>
+#include <string>
+#include <variant>
+#include <map>
+#include "fem/io/meta.hpp"
 
 namespace fem {
 
@@ -27,6 +31,10 @@ public:
     // Randbedingungen als Strategie-Objekte
     virtual std::vector<std::shared_ptr<const fem::boundary::BoundaryCondition>>
     boundary_conditions() const = 0;
+
+    // NEW: minimal metadata hooks
+    virtual std::string name() const = 0;           // e.g. "Poisson1D"
+    virtual fem::io::Meta meta() const = 0;         // problem-specific metadata (labels, etc.)
 };
 
 } // namespace problems

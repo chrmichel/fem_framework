@@ -33,6 +33,8 @@ public:
     std::vector<Index> boundary_nodes() const;
     Index left_boundary_node() const noexcept;
     Index right_boundary_node() const noexcept;
+    double a() const noexcept;
+    double b() const noexcept;
 
 private:
     Index dim_{1};

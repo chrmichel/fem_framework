@@ -21,10 +21,18 @@ public:
               Function rhs,
               Function diffusion,
               Function g_left,
-              Function g_right)
+              Function g_right,
+              std::string rhs_label = "custom",
+              std::string diffusion_label = "custom",
+              std::string g_left_label = "custom",
+              std::string g_right_label = "custom")
         : mesh_(std::make_shared<fem::Mesh>(a, b, elements)),
           rhs_(std::move(rhs)),
-          diffusion_(std::move(diffusion))
+          diffusion_(std::move(diffusion)),
+          rhs_label_(std::move(rhs_label)),
+          diffusion_label_(std::move(diffusion_label)),
+          g_left_label_(std::move(g_left_label)),
+          g_right_label_(std::move(g_right_label))
     {
         // DirichletBC bekommt zwei Funktionen (links/rechts),
         // nutzt mesh.boundary_nodes() / left/right node intern.
@@ -58,12 +66,26 @@ public:
         for (const auto& bc : bcs_) out.push_back(bc);
         return out;
     }
+    std::string name() const override { return "Poisson1D"; }
+
+    fem::io::Meta meta() const override {
+        fem::io::Meta m;
+        m["rhs"] = rhs_label_;
+        m["diffusion"] = diffusion_label_;
+        m["dirichlet_left"] = g_left_label_;
+        m["dirichlet_right"] = g_right_label_;
+        m["bc_type"] = std::string("Dirichlet");
+        return m;
+    }
 
 private:
     std::shared_ptr<fem::Mesh> mesh_;
     Function rhs_;
     Function diffusion_;
-
+    std::string rhs_label_;
+    std::string diffusion_label_;
+    std::string g_left_label_;
+    std::string g_right_label_;
     std::vector<std::shared_ptr<const fem::boundary::BoundaryCondition>> bcs_;
 };
 

@@ -73,4 +73,6 @@ std::vector<Mesh::Index> Mesh::boundary_nodes() const
 Mesh::Index Mesh::left_boundary_node() const noexcept { return 0; }
 Mesh::Index Mesh::right_boundary_node() const noexcept { return n_nodes() - 1; }
 
+double Mesh::a() const noexcept { return a_; }
+double Mesh::b() const noexcept { return b_; }
 } // namespace fem

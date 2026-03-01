@@ -8,6 +8,7 @@ target_sources(fem PRIVATE
     linalg/vector.cpp
     linalg/solver.cpp
     solve/driver.cpp
+    io/output.cpp
 )
 
 target_include_directories(fem
@@ -16,3 +17,6 @@ target_include_directories(fem
 )
 
 target_compile_features(fem PUBLIC cxx_std_20)
+target_compile_definitions(fem PUBLIC
+    FEM_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
+)
