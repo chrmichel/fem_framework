@@ -9,6 +9,9 @@ target_sources(fem PRIVATE
     linalg/solver.cpp
     solve/driver.cpp
     io/output.cpp
+    discretization/element/lagrange_p1_1d.cpp
+    discretization/quadrature/gauss_legendre_1d.cpp
+    problems/poisson_1d.cpp
 )
 
 target_include_directories(fem

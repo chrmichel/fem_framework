@@ -1,78 +1,74 @@
 #include "fem/core/mesh.hpp"
 
 #include <stdexcept>
+#include <sstream>
 
-namespace fem {
+namespace fem::core {
 
-Mesh::Mesh(double a, double b, Index elements)
-    : dim_(1), a_(a), b_(b), elements_(elements)
+Mesh::Mesh(std::vector<double> nodes)
+    : m_nodes(std::move(nodes))
 {
-    if (elements_ == 0) {
-        throw std::invalid_argument("Mesh: elements must be > 0");
-    }
-    if (!(b_ > a_)) {
-        throw std::invalid_argument("Mesh: require b > a");
-    }
-
-    const double h = (b_ - a_) / static_cast<double>(elements_);
-
-    // Nodes
-    nodes_.resize(elements_ + 1);
-    for (Index i = 0; i < nodes_.size(); ++i) {
-        const double x = a_ + static_cast<double>(i) * h;
-        nodes_[i] = Point{x, 0.0, 0.0};
-    }
-
-    // Connectivity
-    elements_conn_.resize(elements_);
-    for (Index e = 0; e < elements_; ++e) {
-        elements_conn_[e] = {e, e + 1};
+    if (m_nodes.size() < 2) {
+        throw std::invalid_argument("Mesh: need at least 2 nodes.");
     }
 }
 
-Mesh::Index Mesh::dimension() const noexcept { return dim_; }
-Mesh::Index Mesh::n_nodes() const noexcept { return nodes_.size(); }
-Mesh::Index Mesh::n_elements() const noexcept { return elements_conn_.size(); }
+std::size_t Mesh::n_nodes() const {
+    return m_nodes.size();
+}
 
-const Mesh::Point& Mesh::point(Index i) const
-{
-    if (i >= nodes_.size()) {
-        throw std::out_of_range("Mesh::point: node index out of range");
+std::size_t Mesh::n_elements() const {
+    return m_nodes.size() - 1;
+}
+
+double Mesh::node(std::size_t i) const {
+    if (i >= m_nodes.size()) {
+        std::ostringstream oss;
+        oss << "Mesh::node: index " << i
+            << " out of range (num_nodes=" << m_nodes.size() << ")";
+        throw std::out_of_range(oss.str());
     }
-    return nodes_[i];
+    return m_nodes[i];
 }
 
-double Mesh::node(Index i) const
+std::size_t Mesh::element_node(std::size_t e,
+                               std::size_t local_index) const
 {
-    return point(i).x; // 1D convenience
-}
-
-std::span<const Mesh::Index> Mesh::cell_nodes(Index e) const
-{
-    if (e >= elements_conn_.size()) {
-        throw std::out_of_range("Mesh::cell_nodes: element index out of range");
+    if (e >= n_elements()) {
+        std::ostringstream oss;
+        oss << "Mesh::element_node: element index " << e
+            << " out of range (n_elements=" << n_elements() << ")";
+        throw std::out_of_range(oss.str());
     }
-    // span über die 2 Node-IDs des 1D-Elements
-    return std::span<const Index>(elements_conn_[e].data(), elements_conn_[e].size());
-}
 
-std::array<Mesh::Index, 2> Mesh::element(Index e) const
-{
-    if (e >= elements_conn_.size()) {
-        throw std::out_of_range("Mesh::element: element index out of range");
+    if (local_index > 1) {
+        std::ostringstream oss;
+        oss << "Mesh::element_node: local_index "
+            << local_index << " invalid for P1 element (must be 0 or 1)";
+        throw std::out_of_range(oss.str());
     }
-    return elements_conn_[e];
+
+    return e + local_index;
+}
+// --- NEW ---
+
+std::size_t Mesh::left_boundary_node() const {
+    return 0;
 }
 
-std::vector<Mesh::Index> Mesh::boundary_nodes() const
-{
-    // Phase 1: Intervall hat genau zwei Randknoten
+std::size_t Mesh::right_boundary_node() const {
+    return n_nodes() - 1;
+}
+
+std::array<std::size_t, 2> Mesh::boundary_nodes() const {
     return { left_boundary_node(), right_boundary_node() };
 }
 
-Mesh::Index Mesh::left_boundary_node() const noexcept { return 0; }
-Mesh::Index Mesh::right_boundary_node() const noexcept { return n_nodes() - 1; }
+double Mesh::x_left() const {
+    return node(left_boundary_node());
+}
 
-double Mesh::a() const noexcept { return a_; }
-double Mesh::b() const noexcept { return b_; }
-} // namespace fem
+double Mesh::x_right() const {
+    return node(right_boundary_node());
+}
+} // namespace fem::core

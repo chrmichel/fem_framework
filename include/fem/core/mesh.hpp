@@ -1,49 +1,46 @@
 #pragma once
-#include <cstddef>
+
 #include <vector>
-#include <array>
-#include <span>
+#include <cstddef>
 
-namespace fem
-{
-class Mesh{
+namespace fem::core {
+
+/**
+ * 1D mesh for Phase 1/2.
+ *
+ * Nodes are stored in ascending order.
+ * Connectivity (P1):
+ *   element e connects nodes (e, e+1)
+ */
+class Mesh {
 public:
-    using Index = std::size_t;
+    explicit Mesh(std::vector<double> nodes);
 
-    //Points
-    struct Point{
-        double x{0.0}, y{0.0}, z{0.0};
-        double operator[](Index i) const noexcept {
-            return (i==0)?x:(i==1)?y:z;
-        }
-    };
-    //ctor
-    Mesh(double a, double b, Index elements);
-    //meta
-    Index dimension() const noexcept;
-    Index n_nodes() const noexcept;
-    Index n_elements() const noexcept;
-    //geometry
-    const Point& point(Index i) const;
-    double node(Index i) const; //1D shorthand
-    //topology
-    std::span<const Index> cell_nodes(Index e) const;
-    std::array<Index,2> element(Index e) const;
-    //boundary
-    std::vector<Index> boundary_nodes() const;
-    Index left_boundary_node() const noexcept;
-    Index right_boundary_node() const noexcept;
-    double a() const noexcept;
-    double b() const noexcept;
+    std::size_t n_nodes() const;
+    std::size_t n_elements() const;
 
+    double node(std::size_t i) const;
+
+    /// Returns global node index of local node in element e
+    /// local_index must be 0 or 1 (P1 only)
+    std::size_t element_node(std::size_t e,
+                             std::size_t local_index) const;
+ // --- NEW: boundary node ids (Phase 2: 1D) ---
+
+    /// Global node id at left boundary (x = x_min)
+    std::size_t left_boundary_node() const;
+
+    /// Global node id at right boundary (x = x_max)
+    std::size_t right_boundary_node() const;
+
+    /// Convenience: both boundary node ids {left, right}
+    std::array<std::size_t, 2> boundary_nodes() const;
+
+    // Optional convenience: boundary coordinates
+    double x_left() const;
+    double x_right() const;
 private:
-    Index dim_{1};
-    double a_{0.0};
-    double b_{0.0};
-    Index elements_{0};
-
-    std::vector<Point> nodes_;
-    //connectivity
-    std::vector<std::array<Index,2>> elements_conn_;
+    std::vector<double> m_nodes;
 };
-} // namespace fem
+
+} // namespace fem::core

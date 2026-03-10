@@ -1,32 +1,28 @@
 #pragma once
 
+#include "fem/core/mesh.hpp"
 #include "fem/problems/problem.hpp"
-#include "fem/assembly/assembler.hpp"
-#include "fem/linalg/solver.hpp"
-#include "fem/linalg/matrix.hpp"
+#include "fem/discretization/element/finite_element.hpp"
+#include "fem/discretization/quadrature/quadrature_rule.hpp"
+#include "fem/boundary/boundary_condition.hpp"
 #include "fem/linalg/vector.hpp"
 
-namespace fem::solve {
+namespace fem {
 
-// Optional: Ergebniscontainer, praktisch für Debug/Tests
-struct Result {
-    fem::linalg::Vector u;
-    fem::linalg::Matrix A;
-    fem::linalg::Vector b;
-};
-
+/**
+ * High-level facade for solving FEM systems.
+ *
+ * Phase 2:
+ *   Injection of FiniteElement and QuadratureRule.
+ */
 class Driver {
 public:
-    Driver() = default;
-
-    // "High-level" solve: returns only u
-    fem::linalg::Vector solve(const fem::problems::Problem& problem) const;
-
-    // Debug-friendly: returns u and also A,b
-    Result solve_with_system(const fem::problems::Problem& problem) const;
-
-private:
-    fem::assembly::Assembler assembler_;
+    static linalg::Vector solve(
+        const core::Mesh& mesh,
+        const problems::Problem& problem,
+        const discretization::element::FiniteElement& fe,
+        const discretization::quadrature::QuadratureRule& quad,
+        const boundary::BoundaryCondition& bc);
 };
 
-} // namespace fem::solve
+} // namespace fem

@@ -1,92 +1,58 @@
 #pragma once
 
-#include "problem.hpp"
-#include "fem/core/mesh.hpp"
-#include "fem/boundary/dirichlet_bc.hpp"
+#include "fem/problems/problem.hpp"
+#include "fem/io/meta.hpp"
 
 #include <functional>
-#include <memory>
-#include <utility>
+#include <string>
 
 namespace fem::problems {
 
+/**
+ * Generic 1D Poisson/reaction problem:
+ *
+ *   - (a(x) u')' + c(x) u = f(x)
+ *
+ * with user-provided coefficient functions.
+ *
+ * This class is intentionally lightweight and mesh-independent.
+ */
 class Poisson1D final : public Problem {
 public:
-    using Function = std::function<double(double)>;
+    using ScalarFunction = std::function<double(double)>;
 
-    // Mesh wird intern gehalten (vollständiges Problemobjekt)
-    Poisson1D(double a,
-              double b,
-              std::size_t elements,
-              Function rhs,
-              Function diffusion,
-              Function g_left,
-              Function g_right,
-              std::string rhs_label = "custom",
-              std::string diffusion_label = "custom",
-              std::string g_left_label = "custom",
-              std::string g_right_label = "custom")
-        : mesh_(std::make_shared<fem::Mesh>(a, b, elements)),
-          rhs_(std::move(rhs)),
-          diffusion_(std::move(diffusion)),
-          rhs_label_(std::move(rhs_label)),
-          diffusion_label_(std::move(diffusion_label)),
-          g_left_label_(std::move(g_left_label)),
-          g_right_label_(std::move(g_right_label))
-    {
-        // DirichletBC bekommt zwei Funktionen (links/rechts),
-        // nutzt mesh.boundary_nodes() / left/right node intern.
-        bcs_.push_back(std::make_shared<fem::boundary::DirichletBC>(
-            std::move(g_left),
-            std::move(g_right)
-        ));
-    }
+    explicit Poisson1D(ScalarFunction rhs);
 
-    const fem::Mesh& mesh() const override
-    {
-        return *mesh_;
-    }
+    Poisson1D(ScalarFunction rhs,
+              ScalarFunction diffusion);
 
-    double rhs(double x) const override
-    {
-        return rhs_(x);
-    }
+    Poisson1D(ScalarFunction rhs,
+              ScalarFunction diffusion,
+              ScalarFunction reaction);
 
-    double diffusion(double x) const override
-    {
-        return diffusion_(x);
-    }
+    Poisson1D(ScalarFunction rhs,
+              ScalarFunction diffusion,
+              ScalarFunction reaction,
+              ScalarFunction exact,
+              std::string name = "Poisson1D",
+              fem::io::Meta meta = {});
 
-    std::vector<std::shared_ptr<const fem::boundary::BoundaryCondition>>
-    boundary_conditions() const override
-    {
-        // Upcast to interface type
-        std::vector<std::shared_ptr<const fem::boundary::BoundaryCondition>> out;
-        out.reserve(bcs_.size());
-        for (const auto& bc : bcs_) out.push_back(bc);
-        return out;
-    }
-    std::string name() const override { return "Poisson1D"; }
+    double rhs(double x) const override;
+    double diffusion(double x) const override;
+    double reaction(double x) const override;
+    double exact(double x) const override;
 
-    fem::io::Meta meta() const override {
-        fem::io::Meta m;
-        m["rhs"] = rhs_label_;
-        m["diffusion"] = diffusion_label_;
-        m["dirichlet_left"] = g_left_label_;
-        m["dirichlet_right"] = g_right_label_;
-        m["bc_type"] = std::string("Dirichlet");
-        return m;
-    }
+    std::string name() const override;
+    fem::io::Meta meta() const override;
 
 private:
-    std::shared_ptr<fem::Mesh> mesh_;
-    Function rhs_;
-    Function diffusion_;
-    std::string rhs_label_;
-    std::string diffusion_label_;
-    std::string g_left_label_;
-    std::string g_right_label_;
-    std::vector<std::shared_ptr<const fem::boundary::BoundaryCondition>> bcs_;
+    ScalarFunction m_rhs;
+    ScalarFunction m_diffusion;
+    ScalarFunction m_reaction;
+    ScalarFunction m_exact;
+
+    std::string m_name;
+    fem::io::Meta m_meta;
 };
 
 } // namespace fem::problems

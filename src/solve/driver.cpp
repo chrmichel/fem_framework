@@ -1,26 +1,29 @@
 #include "fem/solve/driver.hpp"
 
-namespace fem::solve {
+#include "fem/assembly/assembler.hpp"
+#include "fem/linalg/matrix.hpp"
+#include "fem/linalg/vector.hpp"
+#include "fem/linalg/solver.hpp"   // <- falls deine freie Funktion hier deklariert ist
 
-fem::linalg::Vector Driver::solve(const fem::problems::Problem& problem) const
+namespace fem {
+
+linalg::Vector Driver::solve(
+    const core::Mesh& mesh,
+    const problems::Problem& problem,
+    const discretization::element::FiniteElement& fe,
+    const discretization::quadrature::QuadratureRule& quad,
+    const boundary::BoundaryCondition& bc)
 {
-    fem::linalg::Matrix A;
-    fem::linalg::Vector b;
+    linalg::Matrix A(mesh.n_nodes(), mesh.n_nodes());
+    linalg::Vector b(mesh.n_nodes());
 
-    // Assembler baut System und wendet BCs an
-    assembler_.assemble_system(problem, A, b);
+    assembly::Assembler assembler(mesh, problem, fe, quad);
+    assembler.assemble(A, b);
 
-    return fem::linalg::solve(A, b);
+    bc.apply(A, b, mesh);
+
+    // Free function solver
+    return linalg::solve(A, b);
 }
 
-Result Driver::solve_with_system(const fem::problems::Problem& problem) const
-{
-    Result r;
-
-    assembler_.assemble_system(problem, r.A, r.b);
-    r.u = fem::linalg::solve(r.A, r.b);
-
-    return r;
-}
-
-} // namespace fem::solve
+} // namespace fem

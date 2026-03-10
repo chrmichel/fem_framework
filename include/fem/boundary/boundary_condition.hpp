@@ -1,8 +1,9 @@
 #pragma once
+#include <string>
 
 namespace fem {
 namespace linalg { class Matrix; class Vector; }
-class Mesh;
+namespace core { class Mesh; }
 
 namespace boundary {
 
@@ -12,7 +13,9 @@ public:
 
     virtual void apply(linalg::Matrix& A,
                        linalg::Vector& b,
-                       const Mesh& mesh) const = 0;
+                       const core::Mesh& mesh) const = 0;
+
+    virtual std::string name() const { return "BoundaryCondition"; }
 };
 
 } // namespace boundary

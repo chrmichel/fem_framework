@@ -17,7 +17,7 @@ public:
 
     void apply(linalg::Matrix& A,
                linalg::Vector& b,
-               const Mesh& mesh) const override;
+               const core::Mesh& mesh) const override;
 
 private:
     Function g_left_;
@@ -27,7 +27,13 @@ private:
                              double value,
                              linalg::Matrix& A,
                              linalg::Vector& b);
+    
+    virtual std::string name() const override {
+        return "DirichletBC";
+    }
 };
+
+
 
 } // namespace boundary
 } // namespace fem

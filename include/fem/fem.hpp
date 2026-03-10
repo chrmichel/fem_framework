@@ -14,5 +14,11 @@
 #include "linalg/solver.hpp"
 
 #include "solve/driver.hpp"
+
 #include "io/output.hpp"
 #include "io/meta.hpp"
+
+#include "discretization/element/finite_element.hpp"
+#include "discretization/element/lagrange_p1_1d.hpp"
+#include "discretization/quadrature/quadrature_rule.hpp"
+#include "discretization/quadrature/gauss_legendre_1d.hpp"

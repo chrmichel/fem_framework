@@ -20,7 +20,7 @@ DirichletBC::DirichletBC(Function g_left, Function g_right)
 
 void DirichletBC::apply(linalg::Matrix& A,
                         linalg::Vector& b,
-                        const Mesh& mesh) const
+                        const core::Mesh& mesh) const
 {
     // Checks live in linalg layer (as requested)
     linalg::require_square(A);

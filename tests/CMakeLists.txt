@@ -1,15 +1,34 @@
-add_executable(test_mesh test_mesh.cpp)
-target_link_libraries(test_mesh PRIVATE fem)
-add_test(NAME MeshTest COMMAND test_mesh)
+add_executable(mesh_test
+    mesh_test.cpp
+)
+target_link_libraries(mesh_test PRIVATE fem)
+target_include_directories(mesh_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME mesh_test COMMAND mesh_test)
 
-add_executable(test_poisson_linear_dirichlet test_poisson_linear_dirichlet.cpp)
-target_link_libraries(test_poisson_linear_dirichlet PRIVATE fem)
-add_test(NAME PoissonLinearDirichletTest COMMAND test_poisson_linear_dirichlet)
+add_executable(linear_dirichlet_test
+    linear_dirichlet_test.cpp
+)
+target_link_libraries(linear_dirichlet_test PRIVATE fem)
+target_include_directories(linear_dirichlet_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME linear_dirichlet_test COMMAND linear_dirichlet_test)
 
-add_executable(test_poisson_convergence test_poisson_convergence.cpp)
-target_link_libraries(test_poisson_convergence PRIVATE fem)
-add_test(NAME PoissonConvergenceTest COMMAND test_poisson_convergence)
+add_executable(l2_error_test
+    l2_error_test.cpp
+)
+target_link_libraries(l2_error_test PRIVATE fem)
+target_include_directories(l2_error_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME l2_error_test COMMAND l2_error_test)
 
-add_executable(test_poisson_l2_error test_poisson_l2_error.cpp)
-target_link_libraries(test_poisson_l2_error PRIVATE fem)
-add_test(NAME PoissonL2ErrorTest COMMAND test_poisson_l2_error)
+add_executable(convergence_test
+    convergence_test.cpp
+)
+target_link_libraries(convergence_test PRIVATE fem)
+target_include_directories(convergence_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME convergence_test COMMAND convergence_test)
+
+add_executable(reaction_test
+    reaction_test.cpp
+)
+target_link_libraries(reaction_test PRIVATE fem)
+target_include_directories(reaction_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME reaction_test COMMAND reaction_test)
