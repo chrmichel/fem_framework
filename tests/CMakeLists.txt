@@ -32,3 +32,10 @@ add_executable(reaction_test
 target_link_libraries(reaction_test PRIVATE fem)
 target_include_directories(reaction_test PRIVATE ${CMAKE_SOURCE_DIR})
 add_test(NAME reaction_test COMMAND reaction_test)
+
+add_executable(output_test
+    output_test.cpp
+)
+target_link_libraries(output_test PRIVATE fem)
+target_include_directories(output_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME output_test COMMAND output_test)

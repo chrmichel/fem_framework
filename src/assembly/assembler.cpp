@@ -45,9 +45,11 @@ void Assembler::assemble(linalg::Matrix& A,
             throw std::runtime_error(oss.str());
         }
 
-        double Ke[2][2] = {{0.0, 0.0},
-                           {0.0, 0.0}};
-        double fe[2]    = {0.0, 0.0};
+        std::vector<double> fe(ndofs_local, 0.0);
+        std::vector<double> phi(ndofs_local, 0.0);
+        std::vector<double> dphidx(ndofs_local, 0.0);
+        std::vector<std::vector<double>> Ke(
+            ndofs_local, std::vector<double>(ndofs_local, 0.0));
 
         // Quadrature loop
         for (std::size_t q = 0; q < m_quad.size(); ++q) {
@@ -61,10 +63,7 @@ void Assembler::assemble(linalg::Matrix& A,
             const double fq = m_problem.rhs(xq);
             const double c  = m_problem.reaction(xq);   // NEW
 
-            double phi[2];
-            double dphidx[2];
-
-            for (std::size_t i = 0; i < 2; ++i) {
+            for (std::size_t i = 0; i < ndofs_local; ++i) {
                 phi[i] = m_fe.shape(i, xi);
                 const double dphi_dxi = m_fe.dshape_dxi(i, xi);
                 dphidx[i] = dphi_dxi / J;
@@ -72,10 +71,10 @@ void Assembler::assemble(linalg::Matrix& A,
 
             const double weight_phys = w * J;
 
-            for (std::size_t i = 0; i < 2; ++i) {
+            for (std::size_t i = 0; i < ndofs_local; ++i) {
                 fe[i] += fq * phi[i] * weight_phys;
 
-                for (std::size_t j = 0; j < 2; ++j) {
+                for (std::size_t j = 0; j < ndofs_local; ++j) {
                     Ke[i][j] += a * dphidx[i] * dphidx[j] * weight_phys;
                     // reaction term: c * u v   (NEW)
                     Ke[i][j] += c * phi[i] * phi[j] * weight_phys;

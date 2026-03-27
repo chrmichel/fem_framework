@@ -1,7 +1,5 @@
 #pragma once
 
-#include <memory>
-#include <vector>
 #include <string>
 #include <variant>
 #include <map>
@@ -10,7 +8,6 @@
 namespace fem {
 
 namespace boundary {
-class BoundaryCondition;
 }
 
 namespace problems {

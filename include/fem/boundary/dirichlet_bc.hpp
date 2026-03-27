@@ -18,6 +18,10 @@ public:
     void apply(linalg::Matrix& A,
                linalg::Vector& b,
                const core::Mesh& mesh) const override;
+    
+    virtual std::string name() const override {
+        return "DirichletBC";
+    }
 
 private:
     Function g_left_;
@@ -27,10 +31,6 @@ private:
                              double value,
                              linalg::Matrix& A,
                              linalg::Vector& b);
-    
-    virtual std::string name() const override {
-        return "DirichletBC";
-    }
 };
 
 
