@@ -11,6 +11,15 @@ Mesh::Mesh(std::vector<double> nodes)
     if (m_nodes.size() < 2) {
         throw std::invalid_argument("Mesh: need at least 2 nodes.");
     }
+    for (std::size_t i = 1; i < m_nodes.size(); ++i) {
+        if (m_nodes[i] <= m_nodes[i-1]) {
+            std::ostringstream oss;
+            oss << "Mesh: nodes must be strictly increasing, but node "
+                << i << " has coordinate " << m_nodes[i]
+                << " <= previous node " << m_nodes[i-1];
+            throw std::invalid_argument(oss.str());
+        }
+    }
 }
 
 std::size_t Mesh::n_nodes() const {

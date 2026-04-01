@@ -1,5 +1,7 @@
 #pragma once
 
+#include "analysis/l2_error.hpp"
+
 #include "core/mesh.hpp"
 
 #include "problems/problem.hpp"

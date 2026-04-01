@@ -8,6 +8,8 @@
 #include "fem/problems/problem.hpp"
 #include "fem/boundary/dirichlet_bc.hpp"
 
+#include "fem/analysis/l2_error.hpp"
+
 #include <cmath>
 
 namespace {
@@ -38,8 +40,8 @@ int main() {
     const auto u1 = fem::Driver::solve(mesh1, problem, fe, quad, bc);
     const auto u2 = fem::Driver::solve(mesh2, problem, fe, quad, bc);
 
-    const double e1 = fem::tests::l2_error(mesh1, u1, fe, quad, u_exact);
-    const double e2 = fem::tests::l2_error(mesh2, u2, fe, quad, u_exact);
+    const double e1 = fem::analysis::l2_error(mesh1, u1, fe, quad, u_exact);
+    const double e2 = fem::analysis::l2_error(mesh2, u2, fe, quad, u_exact);
 
     fem::test::require(e1 > 0.0, "e1 > 0");
     fem::test::require(e2 > 0.0, "e2 > 0");

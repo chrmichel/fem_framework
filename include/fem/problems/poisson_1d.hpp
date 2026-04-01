@@ -21,14 +21,14 @@ class Poisson1D final : public Problem {
 public:
     using ScalarFunction = std::function<double(double)>;
 
-    explicit Poisson1D(ScalarFunction rhs);
+    // explicit Poisson1D(ScalarFunction rhs);
 
-    Poisson1D(ScalarFunction rhs,
-              ScalarFunction diffusion);
+    // Poisson1D(ScalarFunction rhs,
+    //           ScalarFunction diffusion);
 
-    Poisson1D(ScalarFunction rhs,
-              ScalarFunction diffusion,
-              ScalarFunction reaction);
+    // Poisson1D(ScalarFunction rhs,
+    //           ScalarFunction diffusion,
+    //           ScalarFunction reaction);
 
     Poisson1D(ScalarFunction rhs,
               ScalarFunction diffusion,

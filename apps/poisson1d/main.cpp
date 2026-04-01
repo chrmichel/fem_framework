@@ -20,7 +20,7 @@ int main()
         [](double x){ return PI * PI * std::sin(PI * x); } // rhs
         //"pi^2*sin(pi*x)", "1", "0", "0"
     );
-    auto u_exact_sin = [](double x){ return std::sin(PI * x); };  // optional exact
+    // auto u_exact_sin = [](double x){ return std::sin(PI * x); };  // optional exact
     auto sin_bc = fem::boundary::DirichletBC(
         [](double x){ return 0.0; }, // g_left
         [](double x){ return 0.0; }  // g_right
@@ -29,14 +29,14 @@ int main()
     fem::problems::Poisson1D problem_linear(
         [](double x){ return 0.0; }                          // rhs
     );
-    auto u_exact_linear = [](double x){ return x; };  
+    // auto u_exact_linear = [](double x){ return x; };  
     auto linear_bc = fem::boundary::DirichletBC(
         [](double x){ return 0.0; }, // g_left
         [](double x){ return 1.0; }  // g_right
     );
 
     auto problem = problem_linear; // switch problem here
-    auto u_exact = u_exact_linear; // optional exact
+    // auto u_exact = u_exact_linear; // optional exact
     auto bc = linear_bc; // switch BC here
 
     auto res = fem::Driver::solve(
