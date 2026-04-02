@@ -20,7 +20,7 @@ Mesh::Mesh(std::vector<double> nodes)
             throw std::invalid_argument(oss.str());
         }
     }
-    for (std::size_t e = 0; e < n_elements(); ++e) {
+    for (std::size_t e = 0; e < m_nodes.size() - 1; ++e) {
         m_connectivity.push_back({e, e + 1});
     }
 }
@@ -66,7 +66,7 @@ std::size_t Mesh::n_nodes() const {
 }
 
 std::size_t Mesh::n_elements() const {
-    return m_nodes.size() - 1;
+    return m_connectivity.size();
 }
 
 double Mesh::node(std::size_t i) const {
@@ -89,14 +89,15 @@ std::size_t Mesh::element_node(std::size_t e,
         throw std::out_of_range(oss.str());
     }
 
-    if (local_index > 1) {
+    if (local_index >= m_connectivity[e].size()) {
         std::ostringstream oss;
         oss << "Mesh::element_node: local_index "
-            << local_index << " invalid for P1 element (must be 0 or 1)";
+            << local_index << " invalid for element " << e << ", (ndofs="
+            << m_connectivity[e].size() << ")";
         throw std::out_of_range(oss.str());
     }
 
-    return e + local_index;
+    return m_connectivity[e][local_index];
 }
 // --- NEW ---
 

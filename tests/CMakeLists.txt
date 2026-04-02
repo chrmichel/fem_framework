@@ -39,3 +39,17 @@ add_executable(output_test
 target_link_libraries(output_test PRIVATE fem)
 target_include_directories(output_test PRIVATE ${CMAKE_SOURCE_DIR})
 add_test(NAME output_test COMMAND output_test)
+
+add_executable(p2_element_test
+    p2_element_test.cpp
+)
+target_link_libraries(p2_element_test PRIVATE fem)
+target_include_directories(p2_element_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME p2_element_test COMMAND p2_element_test)
+
+add_executable(p2_convergence_test
+    p2_convergence_test.cpp
+)
+target_link_libraries(p2_convergence_test PRIVATE fem)
+target_include_directories(p2_convergence_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME p2_convergence_test COMMAND p2_convergence_test)

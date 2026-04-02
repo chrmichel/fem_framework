@@ -37,7 +37,7 @@ void Assembler::assemble(linalg::Matrix& A,
             g[i] = m_mesh.element_node(e, i);
 
         const double x0 = m_mesh.node(g[0]);
-        const double x1 = m_mesh.node(g[1]);
+        const double x1 = m_mesh.node(g[ndofs_local - 1]);
 
         const double J = 0.5 * (x1 - x0);
         if (J <= 0.0) {
@@ -58,7 +58,9 @@ void Assembler::assemble(linalg::Matrix& A,
             const double xi = m_quad.point(q);
             const double w  = m_quad.weight(q);
 
-            const double xq = 0.5 * (x0 + x1) + J * xi;
+            double xq = 0.0;
+            for (std::size_t i = 0; i < ndofs_local; ++i)
+                xq += m_mesh.node(g[i]) * m_fe.shape(i, xi);
 
             const double a  = m_problem.diffusion(xq);
             const double fq = m_problem.rhs(xq);
