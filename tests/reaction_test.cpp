@@ -58,8 +58,8 @@ int main() {
     NoReactionProblem p0;
     WithReactionProblem p1;
 
-    const auto u0 = fem::Driver::solve(mesh, p0, fe, quad, bc);
-    const auto u1 = fem::Driver::solve(mesh, p1, fe, quad, bc);
+    const auto u0 = fem::Driver::solve(mesh, p0, fe, quad, {&bc});
+    const auto u1 = fem::Driver::solve(mesh, p1, fe, quad, {&bc});
 
     double diff_norm = 0.0;
     for (std::size_t i = 0; i < mesh.n_nodes(); ++i) {

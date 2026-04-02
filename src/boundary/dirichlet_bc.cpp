@@ -10,11 +10,12 @@
 
 namespace fem::boundary {
 
-DirichletBC::DirichletBC(Function g_left, Function g_right)
+DirichletBC::DirichletBC(std::optional<Function> g_left,
+                         std::optional<Function> g_right)
     : g_left_(std::move(g_left)), g_right_(std::move(g_right))
 {
-    if (!g_left_ || !g_right_) {
-        throw std::invalid_argument("DirichletBC: boundary functions must be valid.");
+    if (!g_left_ && !g_right_) {
+        throw std::invalid_argument("DirichletBC: at least one boundary function must be set.");
     }
 }
 
@@ -22,25 +23,17 @@ void DirichletBC::apply(linalg::Matrix& A,
                         linalg::Vector& b,
                         const core::Mesh& mesh) const
 {
-    // Checks live in linalg layer (as requested)
     linalg::require_square(A);
     linalg::require_same_size(A, b);
 
-    const std::size_t iL = mesh.left_boundary_node();
-    const std::size_t iR = mesh.right_boundary_node();
-
-    // left boundary value
-    {
-        const double xL = mesh.node(iL);
-        const double vL = g_left_(xL);
-        enforce_node(iL, vL, A, b);
+    if (g_left_) {
+        const std::size_t iL = mesh.left_boundary_node();
+        enforce_node(iL, (*g_left_)(mesh.node(iL)), A, b);
     }
 
-    // right boundary value (avoid double apply for degenerate meshes)
-    if (iR != iL) {
-        const double xR = mesh.node(iR);
-        const double vR = g_right_(xR);
-        enforce_node(iR, vR, A, b);
+    if (g_right_) {
+        const std::size_t iR = mesh.right_boundary_node();
+        enforce_node(iR, (*g_right_)(mesh.node(iR)), A, b);
     }
 }
 

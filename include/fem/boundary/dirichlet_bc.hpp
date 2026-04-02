@@ -3,6 +3,7 @@
 #include "boundary_condition.hpp"
 #include <functional>
 #include <cstddef>
+#include <optional>
 
 namespace fem {
 class Mesh;
@@ -13,7 +14,7 @@ class DirichletBC final : public BoundaryCondition {
 public:
     using Function = std::function<double(double)>;
 
-    DirichletBC(Function g_left, Function g_right);
+    DirichletBC(std::optional<Function> g_left, std::optional<Function> g_right);
 
     void apply(linalg::Matrix& A,
                linalg::Vector& b,
@@ -24,8 +25,8 @@ public:
     }
 
 private:
-    Function g_left_;
-    Function g_right_;
+    std::optional<Function> g_left_;
+    std::optional<Function> g_right_;
 
     static void enforce_node(std::size_t node,
                              double value,

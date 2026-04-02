@@ -53,3 +53,9 @@ add_executable(p2_convergence_test
 target_link_libraries(p2_convergence_test PRIVATE fem)
 target_include_directories(p2_convergence_test PRIVATE ${CMAKE_SOURCE_DIR})
 add_test(NAME p2_convergence_test COMMAND p2_convergence_test)
+add_executable(neumann_bc_test
+    neumann_bc_test.cpp
+)
+target_link_libraries(neumann_bc_test PRIVATE fem)
+target_include_directories(neumann_bc_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME neumann_bc_test COMMAND neumann_bc_test)

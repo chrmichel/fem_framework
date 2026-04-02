@@ -12,7 +12,7 @@ linalg::Vector Driver::solve(
     const problems::Problem& problem,
     const discretization::element::FiniteElement& fe,
     const discretization::quadrature::QuadratureRule& quad,
-    const boundary::BoundaryCondition& bc)
+    const std::vector<boundary::BoundaryCondition*>& bcs)
 {
     linalg::Matrix A(mesh.n_nodes(), mesh.n_nodes());
     linalg::Vector b(mesh.n_nodes());
@@ -20,7 +20,9 @@ linalg::Vector Driver::solve(
     assembly::Assembler assembler(mesh, problem, fe, quad);
     assembler.assemble(A, b);
 
-    bc.apply(A, b, mesh);
+    for (const auto& bc : bcs) {
+        bc->apply(A, b, mesh);
+    }
 
     // Free function solver
     return linalg::solve(A, b);

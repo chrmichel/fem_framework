@@ -1,5 +1,7 @@
 #pragma once
 
+#include<vector>
+
 #include "fem/core/mesh.hpp"
 #include "fem/problems/problem.hpp"
 #include "fem/discretization/element/finite_element.hpp"
@@ -22,7 +24,7 @@ public:
         const problems::Problem& problem,
         const discretization::element::FiniteElement& fe,
         const discretization::quadrature::QuadratureRule& quad,
-        const boundary::BoundaryCondition& bc);
+        const std::vector<boundary::BoundaryCondition*>& bcs);
 };
 
 } // namespace fem

@@ -33,7 +33,7 @@ int main() {
         [](double){ return 1.0; }
     );
 
-    const auto u = fem::Driver::solve(mesh, problem, fe, quad, bc);
+    const auto u = fem::Driver::solve(mesh, problem, fe, quad, {&bc});
 
     for (std::size_t i = 0; i < mesh.n_nodes(); ++i) {
         const double x = mesh.node(i);

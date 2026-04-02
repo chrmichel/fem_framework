@@ -5,6 +5,7 @@ target_sources(fem PRIVATE
     core/mesh_utils.cpp
     assembly/assembler.cpp
     boundary/dirichlet_bc.cpp
+    boundary/neumann_bc.cpp
     linalg/matrix.cpp
     linalg/vector.cpp
     linalg/solver.cpp

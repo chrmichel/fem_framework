@@ -122,7 +122,7 @@ void write_meta_json(const fs::path& file,
                      const fem::problems::Problem& problem,
                      const fem::discretization::element::FiniteElement& fe,
                      const fem::discretization::quadrature::QuadratureRule& quad,
-                     const fem::boundary::BoundaryCondition& bc)
+                     const std::vector<fem::boundary::BoundaryCondition*>& bcs)
 {
     std::ofstream out(file);
     if (!out) {
@@ -139,7 +139,12 @@ void write_meta_json(const fs::path& file,
 
     out << "  \"finite_element\": \"" << escape_json(fe.name()) << "\",\n";
     out << "  \"quadrature\": \"" << escape_json(quad.name()) << "\",\n";
-    out << "  \"boundary_condition\": \"" << escape_json(bc.name()) << "\",\n";
+    std::string bc_names;
+    for (const auto* bc : bcs) {
+        if (!bc_names.empty()) bc_names += ", ";
+        bc_names += bc->name();
+    }
+    out << "  \"boundary_condition\": \"" << escape_json(bc_names) << "\",\n";
     out << "  \"n_nodes\": " << mesh.n_nodes() << ",\n";
     out << "  \"n_elements\": " << mesh.n_elements() << "\n";
     out << "}\n";
@@ -152,14 +157,14 @@ fs::path write_results(const core::Mesh& mesh,
                        const problems::Problem& problem,
                        const discretization::element::FiniteElement& fe,
                        const discretization::quadrature::QuadratureRule& quad,
-                       const boundary::BoundaryCondition& bc,
+                       const std::vector<boundary::BoundaryCondition*>& bcs,
                        const std::string& base_dir)
 {
     const fs::path run_dir = fs::path(base_dir) / make_timestamp();
     fs::create_directories(run_dir);
 
     write_solution_csv(run_dir / "solution.csv", mesh, solution);
-    write_meta_json(run_dir / "meta.json", mesh, problem, fe, quad, bc);
+    write_meta_json(run_dir / "meta.json", mesh, problem, fe, quad, bcs);
 
     return run_dir;
 }

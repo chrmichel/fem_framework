@@ -18,7 +18,7 @@ std::filesystem::path write_results(
     const problems::Problem& problem,
     const discretization::element::FiniteElement& fe,
     const discretization::quadrature::QuadratureRule& quad,
-    const boundary::BoundaryCondition& bc,
+    const std::vector<boundary::BoundaryCondition*>& bcs,
     const std::string& base_dir = "results");
 
 } // namespace fem::io

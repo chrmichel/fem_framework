@@ -11,6 +11,7 @@
 #include "assembly/assembler.hpp"
 
 #include "boundary/dirichlet_bc.hpp"
+#include "boundary/neumann_bc.hpp"
 
 #include "linalg/matrix.hpp"
 #include "linalg/vector.hpp"

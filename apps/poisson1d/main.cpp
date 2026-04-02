@@ -43,7 +43,7 @@ int main()
         mesh, problem,
         fem::discretization::element::LagrangeP1_1D(),
         fem::discretization::quadrature::GaussLegendre1D(2),
-        bc
+        {&bc}
     );
 
     // fully automatic meta.json from problem + mesh + framework defaults
@@ -51,7 +51,7 @@ int main()
         mesh, res, problem, 
         fem::discretization::element::LagrangeP1_1D(),
         fem::discretization::quadrature::GaussLegendre1D(2),
-        bc
+        {&bc}
     );
 
     //std::cout << "Wrote results to: " << out_dir << "\n";

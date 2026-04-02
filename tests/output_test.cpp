@@ -70,7 +70,7 @@ int main() {
         [](double) { return 1.0; }
     );
 
-    const auto u = fem::Driver::solve(mesh, problem, fe, quad, bc);
+    const auto u = fem::Driver::solve(mesh, problem, fe, quad, {&bc});
 
     const fs::path base_dir = "test_results_output";
     if (fs::exists(base_dir)) {
@@ -78,7 +78,7 @@ int main() {
     }
 
     const fs::path run_dir =
-        fem::io::write_results(mesh, u, problem, fe, quad, bc, base_dir.string());
+        fem::io::write_results(mesh, u, problem, fe, quad, {&bc}, base_dir.string());
 
     fem::test::require(fs::exists(run_dir), "result directory exists");
     fem::test::require(fs::is_directory(run_dir), "result path is a directory");
