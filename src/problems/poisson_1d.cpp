@@ -57,11 +57,11 @@ Poisson1D::Poisson1D(ScalarFunction rhs,
 }
 */
 Poisson1D::Poisson1D(ScalarFunction rhs,
-                     ScalarFunction diffusion = [](double) { return 1.0; },
-                     ScalarFunction reaction = [](double) { return 0.0; },
-                     ScalarFunction exact = [](double) { return 0.0; },
-                     std::string name = "Poisson1D",
-                     fem::io::Meta meta = {})
+                     ScalarFunction diffusion,
+                     ScalarFunction reaction,
+                     ScalarFunction exact,
+                     std::string name,
+                     fem::io::Meta meta)
     : m_rhs(std::move(rhs)),
       m_diffusion(std::move(diffusion)),
       m_reaction(std::move(reaction)),

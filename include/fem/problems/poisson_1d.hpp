@@ -31,11 +31,11 @@ public:
     //           ScalarFunction reaction);
 
     Poisson1D(ScalarFunction rhs,
-              ScalarFunction diffusion,
-              ScalarFunction reaction,
-              ScalarFunction exact,
-              std::string name = "Poisson1D",
-              fem::io::Meta meta = {});
+                ScalarFunction diffusion = [](double) { return 1.0; },
+                ScalarFunction reaction = [](double) { return 0.0; },
+                ScalarFunction exact = [](double) { return 0.0; },
+                std::string name = "Poisson1D",
+                fem::io::Meta meta = {});
 
     double rhs(double x) const override;
     double diffusion(double x) const override;

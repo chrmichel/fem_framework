@@ -16,6 +16,8 @@ namespace fem::core {
 class Mesh {
 public:
     explicit Mesh(std::vector<double> nodes);
+    Mesh(std::vector<double> nodes,
+         std::vector<std::vector<std::size_t>> connectivity);
 
     std::size_t n_nodes() const;
     std::size_t n_elements() const;
@@ -40,8 +42,10 @@ public:
     // Optional convenience: boundary coordinates
     double x_left() const;
     double x_right() const;
+    std::size_t nodes_per_element(std::size_t e) const { return m_connectivity[e].size(); } 
 private:
     std::vector<double> m_nodes;
+    std::vector<std::vector<std::size_t>> m_connectivity;
 };
 
 } // namespace fem::core
