@@ -59,3 +59,9 @@ add_executable(neumann_bc_test
 target_link_libraries(neumann_bc_test PRIVATE fem)
 target_include_directories(neumann_bc_test PRIVATE ${CMAKE_SOURCE_DIR})
 add_test(NAME neumann_bc_test COMMAND neumann_bc_test)
+add_executable(adaptive_refinement_test
+    adaptive_refinement_test.cpp
+)
+target_link_libraries(adaptive_refinement_test PRIVATE fem)
+target_include_directories(adaptive_refinement_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME adaptive_refinement_test COMMAND adaptive_refinement_test)

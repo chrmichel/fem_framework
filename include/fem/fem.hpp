@@ -1,6 +1,9 @@
 #pragma once
 
 #include "analysis/l2_error.hpp"
+#include "analysis/error_estimate.hpp"
+#include "analysis/jump_indicator.hpp"
+#include "analysis/refine.hpp"
 
 #include "core/mesh.hpp"
 #include "core/mesh_utils.hpp"

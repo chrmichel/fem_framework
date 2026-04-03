@@ -43,9 +43,12 @@ public:
     double x_left() const;
     double x_right() const;
     std::size_t nodes_per_element(std::size_t e) const { return m_connectivity[e].size(); } 
+    void set_boundary_nodes(std::size_t left_id, std::size_t right_id);
 private:
     std::vector<double> m_nodes;
     std::vector<std::vector<std::size_t>> m_connectivity;
+    std::size_t m_left_boundary_node{0}; // default to first node
+    std::size_t m_right_boundary_node{0};
 };
 
 } // namespace fem::core

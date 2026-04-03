@@ -15,6 +15,8 @@ target_sources(fem PRIVATE
     discretization/element/lagrange_p2_1d.cpp
     discretization/quadrature/gauss_legendre_1d.cpp
     problems/poisson_1d.cpp
+    analysis/jump_indicator.cpp
+    analysis/refine.cpp
 )
 
 target_include_directories(fem

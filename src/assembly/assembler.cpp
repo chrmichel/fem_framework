@@ -21,15 +21,6 @@ void Assembler::assemble(linalg::Matrix& A,
 {
     const std::size_t ndofs_local = m_fe.num_dofs();
 
-    // Phase-2 Constraint:
-    // Mesh connectivity is still P1-based (2 nodes per element).
-    // if (ndofs_local != 2) {
-    //     std::ostringstream oss;
-    //     oss << "Assembler: Mesh connectivity is P1-only but FiniteElement has "
-    //         << ndofs_local << " local DoFs.";
-    //     throw std::invalid_argument(oss.str());
-    // }
-
     for (std::size_t e = 0; e < m_mesh.n_elements(); ++e) {
 
         std::vector<std::size_t> g(ndofs_local);

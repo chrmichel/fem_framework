@@ -23,6 +23,7 @@ Mesh::Mesh(std::vector<double> nodes)
     for (std::size_t e = 0; e < m_nodes.size() - 1; ++e) {
         m_connectivity.push_back({e, e + 1});
     }
+    m_right_boundary_node = m_nodes.size() - 1;
 }
 
 Mesh::Mesh(std::vector<double> nodes,
@@ -32,15 +33,6 @@ Mesh::Mesh(std::vector<double> nodes,
 {
     if (m_nodes.size() < 2) {
         throw std::invalid_argument("Mesh: need at least 2 nodes.");
-    }
-    for (std::size_t i = 1; i < m_nodes.size(); ++i) {
-        if (m_nodes[i] <= m_nodes[i-1]) {
-            std::ostringstream oss;
-            oss << "Mesh: nodes must be strictly increasing, but node "
-                << i << " has coordinate " << m_nodes[i]
-                << " <= previous node " << m_nodes[i-1];
-            throw std::invalid_argument(oss.str());
-        }
     }
     // validate connectivity
     for (std::size_t e = 0; e < m_connectivity.size(); ++e) {
@@ -59,6 +51,7 @@ Mesh::Mesh(std::vector<double> nodes,
             }
         }
     }
+    m_right_boundary_node = m_nodes.size() - 1;
 }
 
 std::size_t Mesh::n_nodes() const {
@@ -102,11 +95,11 @@ std::size_t Mesh::element_node(std::size_t e,
 // --- NEW ---
 
 std::size_t Mesh::left_boundary_node() const {
-    return 0;
+    return m_left_boundary_node;
 }
 
 std::size_t Mesh::right_boundary_node() const {
-    return n_nodes() - 1;
+    return m_right_boundary_node;
 }
 
 std::array<std::size_t, 2> Mesh::boundary_nodes() const {
@@ -119,5 +112,13 @@ double Mesh::x_left() const {
 
 double Mesh::x_right() const {
     return node(right_boundary_node());
+}
+
+void Mesh::set_boundary_nodes(std::size_t left_id, std::size_t right_id) {
+    if (left_id >= n_nodes() || right_id >= n_nodes()) {
+        throw std::out_of_range("Boundary node id out of range");
+    }
+    m_left_boundary_node = left_id;
+    m_right_boundary_node = right_id;
 }
 } // namespace fem::core

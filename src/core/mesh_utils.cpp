@@ -21,6 +21,8 @@ Mesh create_p2_mesh_1d(double a, double b, std::size_t num_elements) {
     for (std::size_t e = 0; e < num_elements; ++e) {
         connectivity.push_back({2*e, 2*e+1, 2*e+2});
     }
-    return Mesh(nodes, connectivity);
+    Mesh m(std::move(nodes), std::move(connectivity));
+    m.set_boundary_nodes(0, 2*num_elements); // first and last node are boundaries
+    return m;
 }
 } // namespace fem::core
