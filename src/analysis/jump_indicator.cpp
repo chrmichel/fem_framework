@@ -6,7 +6,7 @@
 namespace fem::analysis {
 
 ErrorEstimate jump_indicator(
-    const core::Mesh& mesh,
+    const core::Mesh1D& mesh,
     const linalg::Vector& u,
     const problems::Problem& problem)
 {
@@ -20,9 +20,9 @@ ErrorEstimate jump_indicator(
         const std::size_t g1 = mesh.element_node(e, mesh.nodes_per_element(e) - 1);
         const std::size_t g2 = mesh.element_node(e + 1, mesh.nodes_per_element(e + 1) - 1);
 
-        const double x0 = mesh.node(g0);
-        const double x1 = mesh.node(g1);
-        const double x2 = mesh.node(g2);
+        const double x0 = mesh.node(g0)[0];
+        const double x1 = mesh.node(g1)[0];
+        const double x2 = mesh.node(g2)[0];
 
         const double h_e    = x1 - x0;
         const double h_next = x2 - x1;

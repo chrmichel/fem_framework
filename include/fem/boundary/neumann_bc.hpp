@@ -14,7 +14,7 @@ public:
 
     void apply(linalg::SparseMatrix& A,
                linalg::Vector& b,
-               const core::Mesh& mesh) const override;
+               const core::Mesh<1>& mesh) const override;
 
     std::string name() const override { return "NeumannBC"; }
 

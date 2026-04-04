@@ -11,7 +11,7 @@ namespace fem::assembly {
 
 class Assembler {
 public:
-    Assembler(const core::Mesh& mesh,
+    Assembler(const core::Mesh1D& mesh,
               const problems::Problem& problem,
               const discretization::element::FiniteElement& fe,
               const discretization::quadrature::QuadratureRule& quad);
@@ -21,7 +21,7 @@ public:
                   linalg::Vector& b) const;
 
 private:
-    const core::Mesh& m_mesh;
+    const core::Mesh1D& m_mesh;
     const problems::Problem& m_problem;
     const discretization::element::FiniteElement& m_fe;
     const discretization::quadrature::QuadratureRule& m_quad;

@@ -8,7 +8,7 @@
 
 namespace fem::analysis {
     
-inline double l2_error(const fem::core::Mesh& mesh,
+inline double l2_error(const fem::core::Mesh1D& mesh,
                        const fem::linalg::Vector& u,
                        const fem::discretization::element::FiniteElement& fe,
                        const fem::discretization::quadrature::QuadratureRule& quad,
@@ -22,8 +22,8 @@ inline double l2_error(const fem::core::Mesh& mesh,
         const std::size_t g0 = mesh.element_node(e, 0);
         const std::size_t glast = mesh.element_node(e, ndofs - 1);
 
-        const double x0 = mesh.node(g0);
-        const double x1 = mesh.node(glast);
+        const double x0 = mesh.node(g0)[0];
+        const double x1 = mesh.node(glast)[0];
         const double J   = 0.5 * (x1 - x0);
         const double mid = 0.5 * (x0 + x1);
 

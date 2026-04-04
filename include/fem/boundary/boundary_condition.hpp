@@ -3,7 +3,7 @@
 
 namespace fem {
 namespace linalg { class Vector; class SparseMatrix; }
-namespace core { class Mesh; }
+namespace core { template<int Dim> class Mesh; }
 
 namespace boundary {
 
@@ -13,7 +13,7 @@ public:
 
     virtual void apply(linalg::SparseMatrix& A,
                        linalg::Vector& b,
-                       const core::Mesh& mesh) const = 0;
+                       const core::Mesh<1>& mesh) const = 0;
 
     virtual std::string name() const { return "BoundaryCondition"; }
 };

@@ -13,7 +13,7 @@
 namespace fem::io {
 
 std::filesystem::path write_results(
-    const core::Mesh& mesh,
+    const core::Mesh1D& mesh,
     const linalg::Vector& solution,
     const problems::Problem& problem,
     const discretization::element::FiniteElement& fe,

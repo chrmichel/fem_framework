@@ -7,7 +7,7 @@
 namespace fem::analysis {
 
 ErrorEstimate jump_indicator(
-    const core::Mesh& mesh,
+    const core::Mesh1D& mesh,
     const linalg::Vector& u,
     const problems::Problem& problem);
 

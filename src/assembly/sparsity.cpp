@@ -7,7 +7,7 @@
 namespace fem::assembly {
 
 linalg::SparseMatrix build_sparse_matrix(
-    const core::Mesh& mesh,
+    const core::Mesh1D& mesh,
     const discretization::element::FiniteElement& fe)
 {
     const std::size_t n = mesh.n_nodes();

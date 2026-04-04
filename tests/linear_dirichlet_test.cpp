@@ -36,7 +36,7 @@ int main() {
     const auto u = fem::Driver::solve(mesh, problem, fe, quad, {&bc});
 
     for (std::size_t i = 0; i < mesh.n_nodes(); ++i) {
-        const double x = mesh.node(i);
+        const double x = mesh.node(i)[0];
         fem::test::require_close(u(i), x, 1e-12, "nodal linear exactness u(i)=x");
     }
 

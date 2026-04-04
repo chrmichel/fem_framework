@@ -95,7 +95,7 @@ void write_meta_object(std::ostream& out,
 }
 
 void write_solution_csv(const fs::path& file,
-                        const fem::core::Mesh& mesh,
+                        const fem::core::Mesh1D& mesh,
                         const fem::linalg::Vector& solution)
 {
     if (solution.size() != mesh.n_nodes()) {
@@ -112,13 +112,13 @@ void write_solution_csv(const fs::path& file,
     out << "node_id,x,u\n";
     for (std::size_t i = 0; i < mesh.n_nodes(); ++i) {
         out << i << ","
-            << std::setprecision(16) << mesh.node(i) << ","
+            << std::setprecision(16) << mesh.node(i)[0] << ","
             << std::setprecision(16) << solution(i) << "\n";
     }
 }
 
 void write_meta_json(const fs::path& file,
-                     const fem::core::Mesh& mesh,
+                     const fem::core::Mesh1D& mesh,
                      const fem::problems::Problem& problem,
                      const fem::discretization::element::FiniteElement& fe,
                      const fem::discretization::quadrature::QuadratureRule& quad,
@@ -152,7 +152,7 @@ void write_meta_json(const fs::path& file,
 
 } // namespace
 
-fs::path write_results(const core::Mesh& mesh,
+fs::path write_results(const core::Mesh1D& mesh,
                        const linalg::Vector& solution,
                        const problems::Problem& problem,
                        const discretization::element::FiniteElement& fe,

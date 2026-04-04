@@ -6,7 +6,7 @@
 
 namespace fem::analysis {
 
-core::Mesh refine(const core::Mesh& mesh,
+core::Mesh1D refine(const core::Mesh1D& mesh,
                   const ErrorEstimate& estimate,
                   double theta)
 {
@@ -29,7 +29,7 @@ core::Mesh refine(const core::Mesh& mesh,
 
     const double threshold = theta * max_eta;
 
-    std::vector<double> new_nodes;
+    std::vector<core::Mesh1D::Point> new_nodes;
     std::vector<std::vector<std::size_t>> new_conn;
 
     new_nodes.reserve(mesh.n_nodes());
@@ -43,9 +43,9 @@ core::Mesh refine(const core::Mesh& mesh,
         const std::size_t g1   = mesh.element_node(e, mesh.nodes_per_element(e) - 1);
 
         if (estimate.indicators[e] > threshold) {
-            const double xmid    = 0.5 * (mesh.node(g0) + mesh.node(g1));
+            const double xmid    = 0.5 * (mesh.node(g0)[0] + mesh.node(g1)[0]);
             const std::size_t gm = new_nodes.size();
-            new_nodes.push_back(xmid);
+            new_nodes.push_back({xmid});
 
             new_conn.push_back({g0, gm});
             new_conn.push_back({gm, g1});
@@ -55,13 +55,13 @@ core::Mesh refine(const core::Mesh& mesh,
     }
 
     for (std::size_t i = 0; i < new_nodes.size(); ++i)
-        std::cerr << "node " << i << " = " << new_nodes[i] << "\n";
+        std::cerr << "node " << i << " = " << new_nodes[i][0] << "\n";
     for (std::size_t e = 0; e < new_conn.size(); ++e) {
         std::cerr << "elem " << e << " -> ";
         for (auto idx : new_conn[e]) std::cerr << idx << " ";
         std::cerr << "\n";
     }
-    core::Mesh refined(std::move(new_nodes), std::move(new_conn));
+    core::Mesh1D refined(std::move(new_nodes), std::move(new_conn));
     refined.set_boundary_nodes(mesh.left_boundary_node(), mesh.right_boundary_node());
     return refined;
 }

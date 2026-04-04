@@ -5,7 +5,7 @@
 
 namespace fem::assembly {
 
-Assembler::Assembler(const core::Mesh& mesh,
+Assembler::Assembler(const core::Mesh1D& mesh,
                      const problems::Problem& problem,
                      const discretization::element::FiniteElement& fe,
                      const discretization::quadrature::QuadratureRule& quad)
@@ -27,8 +27,8 @@ void Assembler::assemble(linalg::SparseMatrix& A,
         for (std::size_t i = 0; i < ndofs_local; ++i)
             g[i] = m_mesh.element_node(e, i);
 
-        const double x0 = m_mesh.node(g[0]);
-        const double x1 = m_mesh.node(g[ndofs_local - 1]);
+        const double x0 = m_mesh.node(g[0])[0];
+        const double x1 = m_mesh.node(g[ndofs_local - 1])[0];
 
         const double J = 0.5 * (x1 - x0);
         if (J <= 0.0) {
@@ -51,7 +51,7 @@ void Assembler::assemble(linalg::SparseMatrix& A,
 
             double xq = 0.0;
             for (std::size_t i = 0; i < ndofs_local; ++i)
-                xq += m_mesh.node(g[i]) * m_fe.shape(i, xi);
+                xq += m_mesh.node(g[i])[0] * m_fe.shape(i, xi);
 
             const double a  = m_problem.diffusion(xq);
             const double fq = m_problem.rhs(xq);

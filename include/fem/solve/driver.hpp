@@ -20,7 +20,7 @@ namespace fem {
 class Driver {
 public:
     static linalg::Vector solve(
-        const core::Mesh& mesh,
+        const core::Mesh1D& mesh,
         const problems::Problem& problem,
         const discretization::element::FiniteElement& fe,
         const discretization::quadrature::QuadratureRule& quad,

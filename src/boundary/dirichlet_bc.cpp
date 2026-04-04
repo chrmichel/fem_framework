@@ -21,19 +21,19 @@ DirichletBC::DirichletBC(std::optional<Function> g_left,
 
 void DirichletBC::apply(linalg::SparseMatrix& A,
                         linalg::Vector& b,
-                        const core::Mesh& mesh) const
+                        const core::Mesh1D& mesh) const
 {
     linalg::require_square(A);
     linalg::require_same_size(A, b);
 
     if (g_left_) {
         const std::size_t iL = mesh.left_boundary_node();
-        enforce_node(iL, (*g_left_)(mesh.node(iL)), A, b);
+        enforce_node(iL, (*g_left_)(mesh.node(iL)[0]), A, b);
     }
 
     if (g_right_) {
         const std::size_t iR = mesh.right_boundary_node();
-        enforce_node(iR, (*g_right_)(mesh.node(iR)), A, b);
+        enforce_node(iR, (*g_right_)(mesh.node(iR)[0]), A, b);
     }
 }
 

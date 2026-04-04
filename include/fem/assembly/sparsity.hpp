@@ -7,7 +7,7 @@ namespace fem::assembly {
 
 // Baut SparseMatrix mit korrektem Pattern aus Mesh + Element
 linalg::SparseMatrix build_sparse_matrix(
-    const core::Mesh& mesh,
+    const core::Mesh1D& mesh,
     const discretization::element::FiniteElement& fe);
 
 } // namespace fem::assembly

@@ -19,16 +19,16 @@ NeumannBC::NeumannBC(std::optional<Function> g_left,
 
 void NeumannBC::apply(linalg::SparseMatrix& /*A*/,
                       linalg::Vector& b,
-                      const core::Mesh& mesh) const
+                      const core::Mesh1D& mesh) const
 {
     if (g_left_) {
         const std::size_t iL = mesh.left_boundary_node();
-        b(iL) -= (*g_left_)(mesh.node(iL));
+        b(iL) -= (*g_left_)(mesh.node(iL)[0]);
     }
 
     if (g_right_) {
         const std::size_t iR = mesh.right_boundary_node();
-        b(iR) += (*g_right_)(mesh.node(iR));
+        b(iR) += (*g_right_)(mesh.node(iR)[0]);
     }
 }
 
