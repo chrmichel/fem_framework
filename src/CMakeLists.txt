@@ -4,11 +4,13 @@ target_sources(fem PRIVATE
     core/mesh.cpp
     core/mesh_utils.cpp
     assembly/assembler.cpp
+    assembly/sparsity.cpp
     boundary/dirichlet_bc.cpp
     boundary/neumann_bc.cpp
     linalg/matrix.cpp
     linalg/vector.cpp
     linalg/solver.cpp
+    linalg/sparse_matrix.cpp
     solve/driver.cpp
     io/output.cpp
     discretization/element/lagrange_p1_1d.cpp

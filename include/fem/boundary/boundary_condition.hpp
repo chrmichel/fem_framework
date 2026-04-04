@@ -2,7 +2,7 @@
 #include <string>
 
 namespace fem {
-namespace linalg { class Matrix; class Vector; }
+namespace linalg { class Vector; class SparseMatrix; }
 namespace core { class Mesh; }
 
 namespace boundary {
@@ -11,7 +11,7 @@ class BoundaryCondition {
 public:
     virtual ~BoundaryCondition() = default;
 
-    virtual void apply(linalg::Matrix& A,
+    virtual void apply(linalg::SparseMatrix& A,
                        linalg::Vector& b,
                        const core::Mesh& mesh) const = 0;
 

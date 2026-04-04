@@ -12,6 +12,7 @@
 #include "problems/poisson_1d.hpp"
 
 #include "assembly/assembler.hpp"
+#include "assembly/sparsity.hpp"
 
 #include "boundary/dirichlet_bc.hpp"
 #include "boundary/neumann_bc.hpp"
@@ -19,6 +20,8 @@
 #include "linalg/matrix.hpp"
 #include "linalg/vector.hpp"
 #include "linalg/solver.hpp"
+#include "linalg/sparse_matrix.hpp"
+#include "linalg/checks.hpp"
 
 #include "solve/driver.hpp"
 

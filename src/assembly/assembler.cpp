@@ -16,7 +16,7 @@ Assembler::Assembler(const core::Mesh& mesh,
 {
 }
 
-void Assembler::assemble(linalg::Matrix& A,
+void Assembler::assemble(linalg::SparseMatrix& A,
                          linalg::Vector& b) const
 {
     const std::size_t ndofs_local = m_fe.num_dofs();

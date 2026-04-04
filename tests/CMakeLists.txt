@@ -65,3 +65,15 @@ add_executable(adaptive_refinement_test
 target_link_libraries(adaptive_refinement_test PRIVATE fem)
 target_include_directories(adaptive_refinement_test PRIVATE ${CMAKE_SOURCE_DIR})
 add_test(NAME adaptive_refinement_test COMMAND adaptive_refinement_test)
+add_executable(sparsity_test
+    sparsity_test.cpp
+)
+target_link_libraries(sparsity_test PRIVATE fem)
+target_include_directories(sparsity_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME sparsity_test COMMAND sparsity_test)
+add_executable(sparse_matrix_test
+    sparse_matrix_test.cpp
+)
+target_link_libraries(sparse_matrix_test PRIVATE fem)
+target_include_directories(sparse_matrix_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME sparse_matrix_test COMMAND sparse_matrix_test)

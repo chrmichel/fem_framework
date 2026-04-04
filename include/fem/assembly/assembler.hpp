@@ -4,23 +4,12 @@
 #include "fem/problems/problem.hpp"
 #include "fem/discretization/element/finite_element.hpp"
 #include "fem/discretization/quadrature/quadrature_rule.hpp"
-#include "fem/linalg/matrix.hpp"
+#include "fem/linalg/sparse_matrix.hpp"
 #include "fem/linalg/vector.hpp"
 
 namespace fem::assembly {
 
 class Assembler {
-/**
- * Generic FEM Assembler (Phase 2).
- *
- * Works with:
- *   - Mesh (geometry)
- *   - Problem (physics)
- *   - FiniteElement (reference basis)
- *   - QuadratureRule (numerical integration)
- *
- * No hardcoded P1 logic allowed anymore.
- */
 public:
     Assembler(const core::Mesh& mesh,
               const problems::Problem& problem,
@@ -28,7 +17,7 @@ public:
               const discretization::quadrature::QuadratureRule& quad);
 
     /// Assemble global stiffness matrix and RHS vector
-    void assemble(linalg::Matrix& A,
+    void assemble(linalg::SparseMatrix& A,
                   linalg::Vector& b) const;
 
 private:

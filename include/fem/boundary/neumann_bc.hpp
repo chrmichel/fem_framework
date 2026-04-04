@@ -12,7 +12,7 @@ public:
     NeumannBC(std::optional<Function> g_left,
               std::optional<Function> g_right);
 
-    void apply(linalg::Matrix& A,
+    void apply(linalg::SparseMatrix& A,
                linalg::Vector& b,
                const core::Mesh& mesh) const override;
 

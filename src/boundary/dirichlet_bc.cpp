@@ -1,7 +1,7 @@
 #include "fem/boundary/dirichlet_bc.hpp"
 
 #include "fem/core/mesh.hpp"
-#include "fem/linalg/matrix.hpp"
+#include "fem/linalg/sparse_matrix.hpp"
 #include "fem/linalg/vector.hpp"
 #include "fem/linalg/checks.hpp"
 
@@ -19,7 +19,7 @@ DirichletBC::DirichletBC(std::optional<Function> g_left,
     }
 }
 
-void DirichletBC::apply(linalg::Matrix& A,
+void DirichletBC::apply(linalg::SparseMatrix& A,
                         linalg::Vector& b,
                         const core::Mesh& mesh) const
 {
@@ -39,23 +39,26 @@ void DirichletBC::apply(linalg::Matrix& A,
 
 void DirichletBC::enforce_node(std::size_t node,
                                double value,
-                               linalg::Matrix& A,
+                               linalg::SparseMatrix& A,
                                linalg::Vector& b)
 {
-    // Inhomogeneous Dirichlet elimination with RHS correction:
-    // For all j != node: b_j -= A(j,node) * value, then A(j,node) = 0
     const std::size_t n = A.rows();
 
     for (std::size_t j = 0; j < n; ++j) {
-        if (j == node) continue;
-        b(j) -= A(j, node) * value;
-        A(j, node) = 0.0;
+        // nur wenn (j, node) im Pattern existiert
+        try {
+            b(j) -= A(j, node) * value;
+            A(j, node) = 0.0;
+        } catch (const std::out_of_range&) {
+            // Eintrag nicht im Pattern — nichts zu tun
+        }
     }
 
-    // Zero out row 'node'
-    A.set_row_zero(node);
+    // Zeile node nullen
+    for (std::size_t k = A.row_ptr()[node]; k < A.row_ptr()[node + 1]; ++k) {
+        A.values_mutable()[k] = 0.0;
+    }
 
-    // Set diagonal and rhs
     A(node, node) = 1.0;
     b(node) = value;
 }

@@ -1,7 +1,7 @@
 #include "fem/boundary/neumann_bc.hpp"
 #include "fem/core/mesh.hpp"
 #include "fem/linalg/vector.hpp"
-#include "fem/linalg/matrix.hpp"
+#include "fem/linalg/sparse_matrix.hpp"
 
 #include <stdexcept>
 #include <utility>
@@ -17,7 +17,7 @@ NeumannBC::NeumannBC(std::optional<Function> g_left,
     }
 }
 
-void NeumannBC::apply(linalg::Matrix& /*A*/,
+void NeumannBC::apply(linalg::SparseMatrix& /*A*/,
                       linalg::Vector& b,
                       const core::Mesh& mesh) const
 {

@@ -1,6 +1,7 @@
 #include "fem/solve/driver.hpp"
 
 #include "fem/assembly/assembler.hpp"
+#include "fem/assembly/sparsity.hpp"
 #include "fem/linalg/matrix.hpp"
 #include "fem/linalg/vector.hpp"
 #include "fem/linalg/solver.hpp"   // <- falls deine freie Funktion hier deklariert ist
@@ -14,17 +15,15 @@ linalg::Vector Driver::solve(
     const discretization::quadrature::QuadratureRule& quad,
     const std::vector<boundary::BoundaryCondition*>& bcs)
 {
-    linalg::Matrix A(mesh.n_nodes(), mesh.n_nodes());
+    linalg::SparseMatrix A = assembly::build_sparse_matrix(mesh, fe);
     linalg::Vector b(mesh.n_nodes());
 
     assembly::Assembler assembler(mesh, problem, fe, quad);
     assembler.assemble(A, b);
 
-    for (const auto& bc : bcs) {
+    for (const auto* bc : bcs)
         bc->apply(A, b, mesh);
-    }
 
-    // Free function solver
     return linalg::solve(A, b);
 }
 

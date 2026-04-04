@@ -16,7 +16,7 @@ public:
 
     DirichletBC(std::optional<Function> g_left, std::optional<Function> g_right);
 
-    void apply(linalg::Matrix& A,
+    void apply(linalg::SparseMatrix& A,
                linalg::Vector& b,
                const core::Mesh& mesh) const override;
     
@@ -30,7 +30,7 @@ private:
 
     static void enforce_node(std::size_t node,
                              double value,
-                             linalg::Matrix& A,
+                             linalg::SparseMatrix& A,
                              linalg::Vector& b);
 };
 
