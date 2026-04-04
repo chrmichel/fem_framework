@@ -7,7 +7,6 @@ target_sources(fem PRIVATE
     assembly/sparsity.cpp
     boundary/dirichlet_bc.cpp
     boundary/neumann_bc.cpp
-    linalg/matrix.cpp
     linalg/vector.cpp
     linalg/solver.cpp
     linalg/sparse_matrix.cpp

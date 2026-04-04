@@ -2,7 +2,6 @@
 
 #include "fem/assembly/assembler.hpp"
 #include "fem/assembly/sparsity.hpp"
-#include "fem/linalg/matrix.hpp"
 #include "fem/linalg/vector.hpp"
 #include "fem/linalg/solver.hpp"   // <- falls deine freie Funktion hier deklariert ist
 

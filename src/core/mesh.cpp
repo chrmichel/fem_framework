@@ -5,12 +5,13 @@
 
 namespace fem::core {
 
-Mesh::Mesh(std::vector<double> nodes)
-    : m_nodes(std::move(nodes))
-{
+void Mesh::validate_nodes() const {
     if (m_nodes.size() < 2) {
         throw std::invalid_argument("Mesh: need at least 2 nodes.");
     }
+}
+
+void Mesh::validate_nodes_sorted() const {
     for (std::size_t i = 1; i < m_nodes.size(); ++i) {
         if (m_nodes[i] <= m_nodes[i-1]) {
             std::ostringstream oss;
@@ -20,21 +21,9 @@ Mesh::Mesh(std::vector<double> nodes)
             throw std::invalid_argument(oss.str());
         }
     }
-    for (std::size_t e = 0; e < m_nodes.size() - 1; ++e) {
-        m_connectivity.push_back({e, e + 1});
-    }
-    m_right_boundary_node = m_nodes.size() - 1;
 }
 
-Mesh::Mesh(std::vector<double> nodes,
-           std::vector<std::vector<std::size_t>> connectivity)
-    : m_nodes(std::move(nodes)),
-      m_connectivity(std::move(connectivity))
-{
-    if (m_nodes.size() < 2) {
-        throw std::invalid_argument("Mesh: need at least 2 nodes.");
-    }
-    // validate connectivity
+void Mesh::validate_connectivity() const {
     for (std::size_t e = 0; e < m_connectivity.size(); ++e) {
         if (m_connectivity[e].size() < 2) {
             std::ostringstream oss;
@@ -51,6 +40,27 @@ Mesh::Mesh(std::vector<double> nodes,
             }
         }
     }
+}
+
+Mesh::Mesh(std::vector<double> nodes)
+    : m_nodes(std::move(nodes))
+{
+    validate_nodes();
+    validate_nodes_sorted();
+    for (std::size_t e = 0; e < m_nodes.size() - 1; ++e)
+        m_connectivity.push_back({e, e + 1});
+    m_left_boundary_node  = 0;
+    m_right_boundary_node = m_nodes.size() - 1;
+}
+
+Mesh::Mesh(std::vector<double> nodes,
+           std::vector<std::vector<std::size_t>> connectivity)
+    : m_nodes(std::move(nodes)),
+      m_connectivity(std::move(connectivity))
+{
+    validate_nodes();
+    validate_connectivity();
+    m_left_boundary_node  = 0;
     m_right_boundary_node = m_nodes.size() - 1;
 }
 

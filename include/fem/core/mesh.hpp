@@ -49,6 +49,9 @@ private:
     std::vector<std::vector<std::size_t>> m_connectivity;
     std::size_t m_left_boundary_node{0}; // default to first node
     std::size_t m_right_boundary_node{0};
+    void validate_nodes() const;
+    void validate_nodes_sorted() const;
+    void validate_connectivity() const;
 };
 
 } // namespace fem::core
