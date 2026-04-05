@@ -10,8 +10,6 @@ target_sources(fem PRIVATE
     linalg/vector.cpp
     linalg/solver.cpp
     linalg/sparse_matrix.cpp
-    solve/driver.cpp
-    io/output.cpp
     discretization/element/lagrange_p1_1d.cpp
     discretization/element/lagrange_p2_1d.cpp
     discretization/quadrature/gauss_legendre_1d.cpp

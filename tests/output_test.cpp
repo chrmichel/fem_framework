@@ -65,12 +65,12 @@ int main() {
     fem::discretization::element::LagrangeP1_1D fe;
     fem::discretization::quadrature::GaussLegendre1D quad(2);
 
-    fem::boundary::DirichletBC bc(
+    fem::boundary::DirichletBC<1> bc(
         [](double) { return 0.0; },
         [](double) { return 1.0; }
     );
 
-    const auto u = fem::Driver::solve(mesh, problem, fe, quad, {&bc});
+    const auto u = fem::Driver<1>::solve(mesh, problem, fe, quad, {&bc});
 
     const fs::path base_dir = "test_results_output";
     if (fs::exists(base_dir)) {

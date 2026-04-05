@@ -14,7 +14,7 @@ int main()
     fem::problems::Poisson1D problem_sin{
         [](double x){ return PI * PI * std::sin(PI * x); }
     };
-    auto sin_bc = fem::boundary::DirichletBC(
+    auto sin_bc = fem::boundary::DirichletBC<1>(
         [](double) { return 0.0; },
         [](double) { return 0.0; }
     );
@@ -22,7 +22,7 @@ int main()
     fem::problems::Poisson1D problem_linear{
         [](double) { return 0.0; }
     };
-    auto linear_bc = fem::boundary::DirichletBC(
+    auto linear_bc = fem::boundary::DirichletBC<1>(
         [](double) { return 0.0; },
         [](double) { return 1.0; }
     );
@@ -33,7 +33,7 @@ int main()
     const auto fe   = fem::discretization::element::LagrangeP1_1D();
     const auto quad = fem::discretization::quadrature::GaussLegendre1D(2);
 
-    const auto res = fem::Driver::solve(mesh, problem, fe, quad, {&bc});
+    const auto res = fem::Driver<1>::solve(mesh, problem, fe, quad, {&bc});
 
     fem::io::write_results(mesh, res, problem, fe, quad, {&bc});
 

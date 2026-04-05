@@ -27,7 +27,7 @@ int main() {
     fem::discretization::element::LagrangeP1_1D fe;
     fem::discretization::quadrature::GaussLegendre1D quad(3);
 
-    fem::boundary::DirichletBC bc(
+    fem::boundary::DirichletBC<1> bc(
         [](double){ return 0.0; },
         [](double){ return 0.0; }
     );
@@ -37,8 +37,8 @@ int main() {
     const auto mesh1 = fem::tests::make_uniform_mesh(0.0, 1.0, 20);
     const auto mesh2 = fem::tests::make_uniform_mesh(0.0, 1.0, 40);
 
-    const auto u1 = fem::Driver::solve(mesh1, problem, fe, quad, {&bc});
-    const auto u2 = fem::Driver::solve(mesh2, problem, fe, quad, {&bc});
+    const auto u1 = fem::Driver<1>::solve(mesh1, problem, fe, quad, {&bc});
+    const auto u2 = fem::Driver<1>::solve(mesh2, problem, fe, quad, {&bc});
 
     const double e1 = fem::analysis::l2_error(mesh1, u1, fe, quad, u_exact);
     const double e2 = fem::analysis::l2_error(mesh2, u2, fe, quad, u_exact);

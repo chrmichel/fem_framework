@@ -1,20 +1,43 @@
 #pragma once
 #include "boundary_condition.hpp"
+
+#include "fem/core/mesh.hpp"
+#include "fem/linalg/sparse_matrix.hpp"
+#include "fem/linalg/vector.hpp"
+#include "fem/linalg/checks.hpp"
 #include <functional>
 #include <optional>
 
 namespace fem::boundary {
 
-class NeumannBC final : public BoundaryCondition {
+template<int Dim>
+class NeumannBC final : public BoundaryCondition<Dim> {
 public:
     using Function = std::function<double(double)>;
 
     NeumannBC(std::optional<Function> g_left,
-              std::optional<Function> g_right);
+              std::optional<Function> g_right)
+        : g_left_(std::move(g_left)), g_right_(std::move(g_right))
+    {
+        if (!g_left_ && !g_right_) {
+            throw std::invalid_argument("NeumannBC: at least one boundary function must be set.");
+        }
+    }
 
     void apply(linalg::SparseMatrix& A,
                linalg::Vector& b,
-               const core::Mesh<1>& mesh) const override;
+               const core::Mesh<Dim>& mesh) const override
+    {
+        if (g_left_) {
+            const std::size_t iL = mesh.left_boundary_node();
+            b(iL) -= (*g_left_)(mesh.node(iL)[0]);
+        }
+
+        if (g_right_) {
+            const std::size_t iR = mesh.right_boundary_node();
+            b(iR) += (*g_right_)(mesh.node(iR)[0]);
+        }
+    }
 
     std::string name() const override { return "NeumannBC"; }
 

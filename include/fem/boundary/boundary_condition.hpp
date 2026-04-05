@@ -7,13 +7,14 @@ namespace core { template<int Dim> class Mesh; }
 
 namespace boundary {
 
+template<int Dim>
 class BoundaryCondition {
 public:
     virtual ~BoundaryCondition() = default;
 
     virtual void apply(linalg::SparseMatrix& A,
                        linalg::Vector& b,
-                       const core::Mesh<1>& mesh) const = 0;
+                       const core::Mesh<Dim>& mesh) const = 0;
 
     virtual std::string name() const { return "BoundaryCondition"; }
 };

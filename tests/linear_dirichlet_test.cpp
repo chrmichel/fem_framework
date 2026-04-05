@@ -28,12 +28,12 @@ int main() {
     fem::discretization::quadrature::GaussLegendre1D quad(2);
 
     // u(0)=0, u(1)=1 => exact u(x)=x
-    fem::boundary::DirichletBC bc(
+    fem::boundary::DirichletBC<1> bc(
         [](double){ return 0.0; },
         [](double){ return 1.0; }
     );
 
-    const auto u = fem::Driver::solve(mesh, problem, fe, quad, {&bc});
+    const auto u = fem::Driver<1>::solve(mesh, problem, fe, quad, {&bc});
 
     for (std::size_t i = 0; i < mesh.n_nodes(); ++i) {
         const double x = mesh.node(i)[0];
