@@ -89,3 +89,9 @@ add_executable(p1_2d_test
 target_link_libraries(p1_2d_test PRIVATE fem)
 target_include_directories(p1_2d_test PRIVATE ${CMAKE_SOURCE_DIR})
 add_test(NAME p1_2d_test COMMAND p1_2d_test)
+add_executable(triangle_quadrature_test
+    triangle_quadrature_test.cpp
+)
+target_link_libraries(triangle_quadrature_test PRIVATE fem)
+target_include_directories(triangle_quadrature_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME triangle_quadrature_test COMMAND triangle_quadrature_test)

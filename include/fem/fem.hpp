@@ -33,3 +33,4 @@
 #include "discretization/element/lagrange_p1_2d.hpp"
 #include "discretization/quadrature/quadrature_rule.hpp"
 #include "discretization/quadrature/gauss_legendre_1d.hpp"
+#include "discretization/quadrature/triangle_quadrature.hpp"

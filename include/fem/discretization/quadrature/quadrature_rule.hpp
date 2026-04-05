@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cstddef>
 #include <string>
 
@@ -23,6 +24,11 @@ public:
 
     /// q-th quadrature point in reference coordinate xi (xi in [-1,1])
     virtual double point(std::size_t q) const = 0;
+    // Neu — für 2D, Default wirft:
+    virtual std::array<double, 2> point2d(std::size_t q) const {
+        throw std::logic_error(
+            "QuadratureRule::point2d not implemented for this rule");
+    }
 
     /// q-th quadrature weight
     virtual double weight(std::size_t q) const = 0;
