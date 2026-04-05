@@ -28,6 +28,20 @@ public:
     /// Reference derivative d/dxi phi_i(xi)
     virtual double dshape_dxi(std::size_t i, double xi) const = 0;
 
+    // Neu — für 2D, Default wirft:
+    virtual double shape(std::size_t i, double xi, double eta) const {
+        throw std::logic_error(
+            "FiniteElement::shape(i, xi, eta) not implemented for this element");
+    }
+    virtual double dshape_dxi(std::size_t i, double xi, double eta) const {
+        throw std::logic_error(
+            "FiniteElement::dshape_dxi(i, xi, eta) not implemented");
+    }
+    virtual double dshape_deta(std::size_t i, double xi, double eta) const {
+        throw std::logic_error(
+            "FiniteElement::dshape_deta(i, xi, eta) not implemented");
+    }
+
     /// Human-readable identifier
     virtual std::string name() const = 0;
 };

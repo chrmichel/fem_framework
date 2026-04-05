@@ -77,3 +77,15 @@ add_executable(sparse_matrix_test
 target_link_libraries(sparse_matrix_test PRIVATE fem)
 target_include_directories(sparse_matrix_test PRIVATE ${CMAKE_SOURCE_DIR})
 add_test(NAME sparse_matrix_test COMMAND sparse_matrix_test)
+add_executable(mesh2d_test
+    mesh2d_test.cpp
+)
+target_link_libraries(mesh2d_test PRIVATE fem)
+target_include_directories(mesh2d_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME mesh2d_test COMMAND mesh2d_test)
+add_executable(p1_2d_test
+    p1_2d_test.cpp
+)
+target_link_libraries(p1_2d_test PRIVATE fem)
+target_include_directories(p1_2d_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME p1_2d_test COMMAND p1_2d_test)

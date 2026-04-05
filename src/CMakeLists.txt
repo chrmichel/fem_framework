@@ -12,6 +12,7 @@ target_sources(fem PRIVATE
     linalg/sparse_matrix.cpp
     discretization/element/lagrange_p1_1d.cpp
     discretization/element/lagrange_p2_1d.cpp
+    discretization/element/lagrange_p1_2d.cpp
     discretization/quadrature/gauss_legendre_1d.cpp
     problems/poisson_1d.cpp
     analysis/jump_indicator.cpp
