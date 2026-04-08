@@ -4,7 +4,6 @@ target_sources(fem PRIVATE
     core/mesh.cpp
     core/mesh_utils.cpp
     assembly/assembler.cpp
-    assembly/sparsity.cpp
     boundary/dirichlet_bc.cpp
     boundary/neumann_bc.cpp
     linalg/vector.cpp
