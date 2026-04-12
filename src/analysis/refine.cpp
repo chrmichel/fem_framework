@@ -53,16 +53,10 @@ core::Mesh1D refine(const core::Mesh1D& mesh,
             new_conn.push_back({g0, g1});
         }
     }
-
-    for (std::size_t i = 0; i < new_nodes.size(); ++i)
-        std::cerr << "node " << i << " = " << new_nodes[i][0] << "\n";
-    for (std::size_t e = 0; e < new_conn.size(); ++e) {
-        std::cerr << "elem " << e << " -> ";
-        for (auto idx : new_conn[e]) std::cerr << idx << " ";
-        std::cerr << "\n";
-    }
+    
     core::Mesh1D refined(std::move(new_nodes), std::move(new_conn));
     refined.set_boundary_nodes(mesh.left_boundary_node(), mesh.right_boundary_node());
+    refined.set_boundary_node_ids({mesh.left_boundary_node(), mesh.right_boundary_node()});
     return refined;
 }
 

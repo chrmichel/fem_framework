@@ -34,27 +34,27 @@ int main() {
     fem::discretization::quadrature::GaussLegendre1D quad(2);
 
     fem::boundary::DirichletBC<1> dirichlet(
-        [](double) { return 0.0; },  // u(0) = 0
+        [](auto) { return 0.0; },  // u(0) = 0
         std::nullopt                  // rechter Rand: kein Dirichlet
     );
     fem::boundary::NeumannBC<1> neumann(
         std::nullopt,                 // linker Rand: kein Neumann
-        [](double) { return 2.0; }   // u'(1) = 2
+        [](auto) { return 2.0; }   // u'(1) = 2
     );
 
     const auto u = fem::Driver<1>::solve(mesh, problem, fe, quad, {&dirichlet, &neumann});
 
-    const auto u_exact = [](double x) { return x * x; };
+    const auto u_exact = [](auto p) { return p[0] * p[0]; };
 
     // L2-Konvergenz
     fem::discretization::quadrature::GaussLegendre1D quad_err(3);
-    const double err = fem::tests::l2_error(mesh, u, fe, quad_err, u_exact);
+    const double err = fem::tests::l2_error<1>(mesh, u, fe, quad_err, u_exact);
     fem::test::require(err < 1e-3, "L2 error < 1e-3 for 40 elements");
 
     // Fehler nimmt mit Verfeinerung ab
     const auto mesh_fine = fem::tests::make_uniform_mesh(0.0, 1.0, 80);
     const auto u_fine = fem::Driver<1>::solve(mesh_fine, problem, fe, quad, {&neumann, &dirichlet});
-    const double err_fine = fem::tests::l2_error(mesh_fine, u_fine, fe, quad_err, u_exact);
+    const double err_fine = fem::tests::l2_error<1>(mesh_fine, u_fine, fe, quad_err, u_exact);
     fem::test::require(err_fine < err, "error decreases with refinement");
 
     return 0;

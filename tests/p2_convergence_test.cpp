@@ -32,11 +32,11 @@ int main() {
     fem::discretization::quadrature::GaussLegendre1D quad(3);
 
     fem::boundary::DirichletBC<1> bc(
-        [](double) { return 0.0; },
-        [](double) { return 0.0; }
+        [](auto) { return 0.0; },
+        [](auto) { return 0.0; }
     );
 
-    const auto u_exact = [](double x) { return std::sin(M_PI * x); };
+    const auto u_exact = [](auto p) { return std::sin(M_PI * p[0]); };
 
     const std::size_t n1 = 10;
     const std::size_t n2 = 20;
@@ -50,9 +50,9 @@ int main() {
     const auto u2 = fem::Driver<1>::solve(mesh2, problem, fe, quad, {&bc});
     const auto u3 = fem::Driver<1>::solve(mesh3, problem, fe, quad, {&bc});
 
-    const double e1 = fem::tests::l2_error(mesh1, u1, fe, quad, u_exact);
-    const double e2 = fem::tests::l2_error(mesh2, u2, fe, quad, u_exact);
-    const double e3 = fem::tests::l2_error(mesh3, u3, fe, quad, u_exact);
+    const double e1 = fem::tests::l2_error<1>(mesh1, u1, fe, quad, u_exact);
+    const double e2 = fem::tests::l2_error<1>(mesh2, u2, fe, quad, u_exact);
+    const double e3 = fem::tests::l2_error<1>(mesh3, u3, fe, quad, u_exact);
 
     const double h1 = 1.0 / static_cast<double>(n1);
     const double h2 = 1.0 / static_cast<double>(n2);
@@ -60,10 +60,6 @@ int main() {
 
     const double p12 = std::log(e1 / e2) / std::log(h1 / h2);
     const double p23 = std::log(e2 / e3) / std::log(h2 / h3);
-
-    //debug print
-    std::cerr << "e1=" << e1 << " e2=" << e2 << " e3=" << e3 << "\n";
-    std::cerr << "p12=" << p12 << " p23=" << p23 << "\n";
 
     fem::test::require(e2 < e1, "error decreases with refinement (n1->n2)");
     fem::test::require(e3 < e2, "error decreases with refinement (n2->n3)");

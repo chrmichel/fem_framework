@@ -25,6 +25,9 @@ public:
     std::size_t element_node(std::size_t e,
                              std::size_t local_index) const;
 
+    const std::vector<std::size_t>& boundary_node_ids() const;
+    void set_boundary_node_ids(std::vector<std::size_t> ids);
+
     std::size_t left_boundary_node()  const;
     std::size_t right_boundary_node() const;
     std::array<std::size_t, 2> boundary_nodes() const;
@@ -34,6 +37,7 @@ public:
 private:
     std::vector<Point> m_nodes;
     std::vector<std::vector<std::size_t>> m_connectivity;
+    std::vector<std::size_t> m_boundary_node_ids;
     std::size_t m_left_boundary_node{0};
     std::size_t m_right_boundary_node{0};
 

@@ -31,9 +31,9 @@ public:
     //           ScalarFunction reaction);
 
     Poisson1D(ScalarFunction rhs,
-                ScalarFunction diffusion = [](double) { return 1.0; },
-                ScalarFunction reaction = [](double) { return 0.0; },
-                ScalarFunction exact = [](double) { return 0.0; },
+                ScalarFunction diffusion = [](auto) { return 1.0; },
+                ScalarFunction reaction = [](auto) { return 0.0; },
+                ScalarFunction exact = [](auto) { return 0.0; },
                 std::string name = "Poisson1D",
                 fem::io::Meta meta = {});
 

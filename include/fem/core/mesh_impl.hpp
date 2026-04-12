@@ -13,8 +13,9 @@ Mesh<Dim>::Mesh(std::vector<Point> nodes)
     validate_nodes();
     for (std::size_t e = 0; e < m_nodes.size() - 1; ++e)
         m_connectivity.push_back({e, e + 1});
-    m_left_boundary_node  = 0;
-    m_right_boundary_node = m_nodes.size() - 1;
+    m_boundary_node_ids = {0, m_nodes.size() - 1};
+    m_left_boundary_node  = m_boundary_node_ids.front();
+    m_right_boundary_node = m_boundary_node_ids.back();
 }
 
 template<int Dim>
@@ -25,8 +26,9 @@ Mesh<Dim>::Mesh(std::vector<Point> nodes,
 {
     validate_nodes();
     validate_connectivity();
-    m_left_boundary_node  = 0;
-    m_right_boundary_node = m_nodes.size() - 1;
+    m_boundary_node_ids = {0, m_nodes.size() - 1};
+    m_left_boundary_node  = m_boundary_node_ids.front();
+    m_right_boundary_node = m_boundary_node_ids.back();
 }
 
 template<int Dim>
@@ -77,12 +79,12 @@ std::size_t Mesh<Dim>::element_node(std::size_t e,
 
 template<int Dim>
 std::size_t Mesh<Dim>::left_boundary_node() const {
-    return m_left_boundary_node;
+    return m_boundary_node_ids.front();
 }
 
 template<int Dim>
 std::size_t Mesh<Dim>::right_boundary_node() const {
-    return m_right_boundary_node;
+    return m_boundary_node_ids.back();
 }
 
 template<int Dim>
@@ -124,6 +126,22 @@ void Mesh<Dim>::validate_connectivity() const {
             }
         }
     }
+}
+
+template<int Dim>
+const std::vector<std::size_t>& Mesh<Dim>::boundary_node_ids() const {
+    return m_boundary_node_ids;
+}
+
+template<int Dim>
+void Mesh<Dim>::set_boundary_node_ids(std::vector<std::size_t> ids) {
+    for (auto id : ids) {
+        if (id >= m_nodes.size()) {
+            throw std::out_of_range(
+                "Mesh::set_boundary_node_ids: index out of range");
+        }
+    }
+    m_boundary_node_ids = std::move(ids);
 }
 
 } // namespace fem::core

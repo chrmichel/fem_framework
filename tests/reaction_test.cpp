@@ -51,8 +51,8 @@ int main() {
     fem::discretization::quadrature::GaussLegendre1D quad(3);
 
     fem::boundary::DirichletBC<1> bc(
-        [](double) { return 0.0; },
-        [](double) { return 0.0; }
+        [](auto) { return 0.0; },
+        [](auto) { return 0.0; }
     );
 
     NoReactionProblem p0;

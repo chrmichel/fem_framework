@@ -66,8 +66,8 @@ int main() {
     fem::discretization::quadrature::GaussLegendre1D quad(2);
 
     fem::boundary::DirichletBC<1> bc(
-        [](double) { return 0.0; },
-        [](double) { return 1.0; }
+        [](auto) { return 0.0; },
+        [](auto) { return 1.0; }
     );
 
     const auto u = fem::Driver<1>::solve(mesh, problem, fe, quad, {&bc});

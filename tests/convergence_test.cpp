@@ -7,7 +7,7 @@
 #include "fem/discretization/element/lagrange_p1_1d.hpp"
 #include "fem/discretization/quadrature/gauss_legendre_1d.hpp"
 
-#include "fem/analysis/l2_error.hpp"
+//#include "fem/analysis/l2_error.hpp"
 
 #include <cmath>
 #include <cstddef>
@@ -37,11 +37,11 @@ int main() {
     fem::discretization::quadrature::GaussLegendre1D quad(3);
 
     fem::boundary::DirichletBC<1> bc(
-        [](double) { return 0.0; },
-        [](double) { return 0.0; }
+        [](auto) { return 0.0; },
+        [](auto) { return 0.0; }
     );
 
-    const auto u_exact = [](double x) { return std::sin(M_PI * x); };
+    const auto u_exact = [](auto p) { return std::sin(M_PI * p[0]); };
 
     const std::size_t n1 = 20;
     const std::size_t n2 = 40;
@@ -55,9 +55,9 @@ int main() {
     const auto u2 = fem::Driver<1>::solve(mesh2, problem, fe, quad, {&bc});
     const auto u3 = fem::Driver<1>::solve(mesh3, problem, fe, quad, {&bc});
 
-    const double e1 = fem::analysis::l2_error(mesh1, u1, fe, quad, u_exact);
-    const double e2 = fem::analysis::l2_error(mesh2, u2, fe, quad, u_exact);
-    const double e3 = fem::analysis::l2_error(mesh3, u3, fe, quad, u_exact);
+    const double e1 = fem::tests::l2_error<1>(mesh1, u1, fe, quad, u_exact);
+    const double e2 = fem::tests::l2_error<1>(mesh2, u2, fe, quad, u_exact);
+    const double e3 = fem::tests::l2_error<1>(mesh3, u3, fe, quad, u_exact);
 
     const double h1 = 1.0 / static_cast<double>(n1);
     const double h2 = 1.0 / static_cast<double>(n2);

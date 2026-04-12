@@ -61,7 +61,15 @@ Mesh<2> create_triangle_mesh_2d(
     }
 
     Mesh<2> mesh(std::move(nodes), std::move(connectivity));
-    mesh.set_boundary_nodes(0, (nx+1)*(ny+1) - 1);
+    // Randknoten: alle Knoten auf den vier Seiten des Rechtecks
+    std::vector<std::size_t> bnd_ids;
+    for (std::size_t j = 0; j <= ny; ++j) {
+        for (std::size_t i = 0; i <= nx; ++i) {
+            if (i == 0 || i == nx || j == 0 || j == ny)
+                bnd_ids.push_back(idx(i, j));
+        }
+    }
+    mesh.set_boundary_node_ids(std::move(bnd_ids));
     return mesh;
 }
 

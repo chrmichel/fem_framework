@@ -13,7 +13,8 @@ namespace fem::boundary {
 template<int Dim>
 class NeumannBC final : public BoundaryCondition<Dim> {
 public:
-    using Function = std::function<double(double)>;
+    using Point    = typename core::Mesh<Dim>::Point;
+    using Function = std::function<double(Point)>;
 
     NeumannBC(std::optional<Function> g_left,
               std::optional<Function> g_right)
@@ -30,12 +31,11 @@ public:
     {
         if (g_left_) {
             const std::size_t iL = mesh.left_boundary_node();
-            b(iL) -= (*g_left_)(mesh.node(iL)[0]);
+            b(iL) -= (*g_left_)(mesh.node(iL));
         }
-
         if (g_right_) {
             const std::size_t iR = mesh.right_boundary_node();
-            b(iR) += (*g_right_)(mesh.node(iR)[0]);
+            b(iR) += (*g_right_)(mesh.node(iR));
         }
     }
 

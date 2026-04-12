@@ -12,19 +12,19 @@ int main()
     auto mesh = fem::core::create_p1_mesh_1d(x_min, x_max, n_elements);
 
     fem::problems::Poisson1D problem_sin{
-        [](double x){ return PI * PI * std::sin(PI * x); }
+        [](auto x){ return PI * PI * std::sin(PI * x); }
     };
     auto sin_bc = fem::boundary::DirichletBC<1>(
-        [](double) { return 0.0; },
-        [](double) { return 0.0; }
+        [](auto) { return 0.0; },
+        [](auto) { return 0.0; }
     );
 
     fem::problems::Poisson1D problem_linear{
-        [](double) { return 0.0; }
+        [](auto) { return 0.0; }
     };
     auto linear_bc = fem::boundary::DirichletBC<1>(
-        [](double) { return 0.0; },
-        [](double) { return 1.0; }
+        [](auto) { return 0.0; },
+        [](auto) { return 1.0; }
     );
 
     auto problem = problem_linear;

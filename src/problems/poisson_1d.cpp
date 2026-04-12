@@ -7,9 +7,9 @@ namespace fem::problems {
 /** 
 Poisson1D::Poisson1D(ScalarFunction rhs)
     : m_rhs(std::move(rhs)),
-      m_diffusion([](double) { return 1.0; }),
-      m_reaction([](double) { return 0.0; }),
-      m_exact([](double) { return 0.0; }),
+      m_diffusion([](auto) { return 1.0; }),
+      m_reaction([](auto) { return 0.0; }),
+      m_exact([](auto) { return 0.0; }),
       m_name("Poisson1D"),
       m_meta({})
 {
@@ -22,8 +22,8 @@ Poisson1D::Poisson1D(ScalarFunction rhs,
                      ScalarFunction diffusion)
     : m_rhs(std::move(rhs)),
       m_diffusion(std::move(diffusion)),
-      m_reaction([](double) { return 0.0; }),
-      m_exact([](double) { return 0.0; }),
+      m_reaction([](auto) { return 0.0; }),
+      m_exact([](auto) { return 0.0; }),
       m_name("Poisson1D"),
       m_meta({})
 {
@@ -41,7 +41,7 @@ Poisson1D::Poisson1D(ScalarFunction rhs,
     : m_rhs(std::move(rhs)),
       m_diffusion(std::move(diffusion)),
       m_reaction(std::move(reaction)),
-      m_exact([](double) { return 0.0; }),
+      m_exact([](auto) { return 0.0; }),
       m_name("Poisson1D"),
       m_meta({})
 {

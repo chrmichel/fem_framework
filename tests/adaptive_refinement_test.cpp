@@ -34,17 +34,17 @@ int main() {
     fem::discretization::quadrature::GaussLegendre1D quad(3);
 
     fem::boundary::DirichletBC<1> bc(
-        [](double) { return 0.0; },
-        [](double) { return 0.0; }
+        [](auto) { return 0.0; },
+        [](auto) { return 0.0; }
     );
 
-    const auto u_exact = [](double x) { return std::sin(M_PI * x); };
+    const auto u_exact = [](auto p) { return std::sin(M_PI * p[0]); };
 
     // Grobes Ausgangsmesh
     auto mesh = fem::tests::make_uniform_mesh(0.0, 1.0, 8);
 
     const auto u0 = fem::Driver<1>::solve(mesh, problem, fe, quad, {&bc});
-    const double e0 = fem::tests::l2_error(mesh, u0, fe, quad, u_exact);
+    const double e0 = fem::tests::l2_error<1>(mesh, u0, fe, quad, u_exact);
 
     // Ein Verfeinerungsschritt
     const auto est = fem::analysis::jump_indicator(mesh, u0, problem);
@@ -68,7 +68,7 @@ int main() {
 
     // L2-Fehler nimmt ab nach Verfeinerung
     const auto u1 = fem::Driver<1>::solve(mesh_refined, problem, fe, quad, {&bc});
-    const double e1 = fem::tests::l2_error(mesh_refined, u1, fe, quad, u_exact);
+    const double e1 = fem::tests::l2_error<1>(mesh_refined, u1, fe, quad, u_exact);
 
     fem::test::require(e1 < e0,
         "L2 error decreases after refinement");
@@ -82,7 +82,7 @@ int main() {
         const auto est_curr = fem::analysis::jump_indicator(mesh_curr, u_curr, problem);
         const auto mesh_next = fem::analysis::refine(mesh_curr, est_curr, 0.5);
         const auto u_next = fem::Driver<1>::solve(mesh_next, problem, fe, quad, {&bc});
-        const double e_next = fem::tests::l2_error(mesh_next, u_next, fe, quad, u_exact);
+        const double e_next = fem::tests::l2_error<1>(mesh_next, u_next, fe, quad, u_exact);
 
         fem::test::require(e_next < e_curr,
             "error decreases at step " + std::to_string(step));

@@ -95,3 +95,9 @@ add_executable(triangle_quadrature_test
 target_link_libraries(triangle_quadrature_test PRIVATE fem)
 target_include_directories(triangle_quadrature_test PRIVATE ${CMAKE_SOURCE_DIR})
 add_test(NAME triangle_quadrature_test COMMAND triangle_quadrature_test)
+add_executable(poisson2d_convergence_test
+    poisson2d_convergence_test.cpp
+)
+target_link_libraries(poisson2d_convergence_test PRIVATE fem)
+target_include_directories(poisson2d_convergence_test PRIVATE ${CMAKE_SOURCE_DIR})
+add_test(NAME poisson2d_convergence_test COMMAND poisson2d_convergence_test)
